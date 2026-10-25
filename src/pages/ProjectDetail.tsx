@@ -82,6 +82,8 @@ function DetailView({ slug }: { slug: string }) {
   const boards = supportedBoards(project)
   const benchOptions = boards.map((b) => ({ board: b, name: BOARD_NAMES[b] }))
   const notSuitable = unsupportedBoards(project)
+  const support = project.support[sel.board]
+  const boardNote = support.ok ? support.note : undefined
   const boardBar = <SectionBoardBar options={benchOptions} board={sel.board} onBoard={setBoardId} option={option} />
 
   const copyLink = async () => {
@@ -228,6 +230,12 @@ function DetailView({ slug }: { slug: string }) {
             <p className="mt-2 text-center text-xs text-fog dark:text-mist">
               The board you pick here sets the parts, wiring, steps and code below.
             </p>
+            {boardNote && (
+              <p className="mt-3 rounded-xl border border-line bg-card p-3 text-sm leading-relaxed text-fog dark:border-[#2f4234] dark:bg-moss dark:text-mist">
+                <strong className="font-semibold text-ink dark:text-foam">{boardName} note: </strong>
+                {boardNote}
+              </p>
+            )}
             {notSuitable.length > 0 && (
               <div className="mt-3">
                 <NotSuitableList items={notSuitable} />

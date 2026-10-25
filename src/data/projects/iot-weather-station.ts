@@ -291,6 +291,47 @@ void loop() {
 }`,
     },
     {
+      id: 'a-uno',
+      label: 'A · Uno OLED station',
+      note: 'Same libraries. Rain on A0/D2, LDR on A1; the BME280 sits on the 3V3 side of the level shifter.',
+      board: 'uno',
+      versions: ['a'],
+      code: `#include <Wire.h>
+#include <Adafruit_BME280.h>
+#include <Adafruit_SSD1306.h>
+#define RAIN_A A0
+#define RAIN_D 2
+#define LDR A1
+Adafruit_BME280 bme;
+Adafruit_SSD1306 oled(128, 64, &Wire);
+
+void setup() {
+  pinMode(RAIN_D, INPUT);
+  bme.begin(0x76);
+  oled.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+}
+
+void loop() {
+  float t = bme.readTemperature();
+  float h = bme.readHumidity();
+  float p = bme.readPressure() / 100.0;
+  int rain = map(analogRead(RAIN_A), 1023, 300, 0, 100);
+  rain = constrain(rain, 0, 100);
+  int light = map(analogRead(LDR), 0, 1023, 0, 100);
+  bool raining = digitalRead(RAIN_D) == LOW;
+
+  oled.clearDisplay();
+  oled.setTextSize(1); oled.setTextColor(SSD1306_WHITE);
+  oled.setCursor(0, 0);
+  oled.print("T:"); oled.print(t, 1); oled.print("C H:"); oled.print(h, 0); oled.println("%");
+  oled.print("P:"); oled.print(p, 0); oled.println("hPa");
+  oled.print("Rain:"); oled.print(rain); oled.print("% "); oled.println(raining ? "RAIN" : "clear");
+  oled.print("Light:"); oled.print(light); oled.println("%");
+  oled.display();
+  delay(2000);
+}`,
+    },
+    {
       id: 'b',
       label: 'B · ThingSpeak logger',
       note: 'Fields: 1=temp 2=humidity 3=pressure 4=rain. Posts every 20s. Logging only — merge the OLED block from A to keep the display.',

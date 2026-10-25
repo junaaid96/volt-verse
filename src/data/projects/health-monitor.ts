@@ -310,6 +310,80 @@ void loop() {
 }`,
     },
     {
+      id: 'a-uno',
+      label: 'A · Vitals + alarms (Uno)',
+      note: 'Libraries: SparkFun MAX3010x, OneWire, DallasTemperature, U8g2 (U8x8 text mode — Adafruit SSD1306 alone takes half of 2 KB RAM). DS18B20 on D2, buzzer on D5; the MAX30102 sits behind the level shifter. For B, send the vitals to the ESP-01 link (D8/D6) instead of the cloud sketch below.',
+      board: 'uno',
+      versions: ['a', 'b'],
+      code: `#include <Wire.h>
+#include "MAX30105.h"
+#include "heartRate.h"
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#include <U8x8lib.h>
+#define ONE_WIRE 2
+#define BUZZER 5
+const byte RATE_SIZE = 10;            // 10-beat rolling average
+MAX30105 ppg;
+OneWire oneWire(ONE_WIRE);
+DallasTemperature temp(&oneWire);
+U8X8_SSD1306_128X64_NONAME_HW_I2C oled(U8X8_PIN_NONE);
+byte rates[RATE_SIZE], rateIdx = 0, filled = 0;
+long lastBeat = 0;
+float bpmAvg = 0, tempC = 0;
+unsigned long lastTemp = 0, normalSince = 0, lastDraw = 0;
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin();                       // SDA A4, SCL A5 (MAX30102 behind the level shifter)
+  if (!ppg.begin(Wire, I2C_SPEED_FAST)) Serial.println("MAX30102 not found");
+  ppg.setup(0x1F, 4, 2, 400, 411, 4096);
+  temp.begin();
+  temp.setWaitForConversion(false);   // a blocking read stalls beat detection ~750 ms
+  temp.requestTemperatures();
+  pinMode(BUZZER, OUTPUT);
+  oled.begin();
+  oled.setFont(u8x8_font_chroma48medium8_r);
+}
+
+void loop() {
+  long ir = ppg.getIR();
+  if (ir < 50000) {                   // no finger: reset the average
+    memset(rates, 0, sizeof rates); rateIdx = filled = 0; bpmAvg = 0;
+  } else if (checkForBeat(ir)) {
+    long now = millis();
+    float bpm = 60000.0 / (now - lastBeat);
+    lastBeat = now;
+    if (bpm > 40 && bpm < 200) {
+      rates[rateIdx] = (byte)bpm;
+      rateIdx = (rateIdx + 1) % RATE_SIZE;
+      if (filled < RATE_SIZE) filled++;
+      int sum = 0;
+      for (byte i = 0; i < RATE_SIZE; i++) sum += rates[i];
+      bpmAvg = (float)sum / filled;
+    }
+  }
+  if (millis() - lastTemp > 2000) {
+    tempC = temp.getTempCByIndex(0);
+    temp.requestTemperatures();
+    lastTemp = millis();
+  }
+  bool abnormal = filled == RATE_SIZE && (bpmAvg > 120 || bpmAvg < 50);
+  if (!abnormal) normalSince = millis();
+  bool alert = millis() - normalSince > 10000;  // 10 s persistence
+  digitalWrite(BUZZER, alert ? HIGH : LOW);
+  if (millis() - lastDraw > 500) {
+    lastDraw = millis();
+    oled.setCursor(0, 0);
+    oled.print("BPM:"); oled.print(filled ? bpmAvg : 0, 0); oled.print("   ");
+    oled.setCursor(0, 1);
+    oled.print("T:"); oled.print(tempC, 1); oled.print("C   ");
+    oled.setCursor(0, 2);
+    oled.print(alert ? "! CHECK VITALS !" : "                ");
+  }
+}`,
+    },
+    {
       id: 'b',
       label: 'B · Cloud upload',
       note: 'Library: ThingSpeak. Uploads vitals every 20s; a latched SOS press goes out on the next allowed slot (free tier: one update per 15s).',

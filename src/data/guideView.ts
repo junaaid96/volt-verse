@@ -22,13 +22,13 @@ export interface GuideView {
   steps: BuildStep[]
   /**
    * Sketches for the version. Ones written for the selected board come first; another board's sketch
-   * is kept only when the selected board has no sketch covering the same versions (it then needs porting).
+   * is kept only when the selected board has no port of the same sketch family (it then needs porting).
    */
   code: CodeVariant[]
 }
 
-const sameVersions = (a: CodeVariant, b: CodeVariant) =>
-  (a.versions ?? []).slice().sort().join() === (b.versions ?? []).slice().sort().join()
+/** Base sketch id shared by per-board ports: 'a-uno' and 'a-nodemcu' are ports of 'a'. */
+const familyOf = (id: string) => id.replace(/-(esp32cam|esp32|nodemcu|uno)$/, '')
 
 const inScope = (item: Scoped, { version, board }: GuideSelection) =>
   (!item.versions || item.versions.includes(version)) && (!item.boards || item.boards.includes(board))
@@ -58,7 +58,8 @@ export function selectGuide(project: Project, sel: GuideSelection): GuideView {
   const wiring = project.wiring.filter((w) => inScope(w, sel))
   const versionCode = project.code.filter((c) => !c.versions || c.versions.includes(sel.version))
   const boardCode = versionCode.filter((c) => c.board === sel.board)
-  const portCode = versionCode.filter((c) => c.board !== sel.board && !boardCode.some((own) => sameVersions(own, c)))
+  const ownFamilies = new Set(boardCode.map((c) => familyOf(c.id)))
+  const portCode = versionCode.filter((c) => c.board !== sel.board && !ownFamilies.has(familyOf(c.id)))
 
   return {
     parts: project.parts.filter((p) => inScope(p, sel)),

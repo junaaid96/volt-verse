@@ -1,12 +1,21 @@
 {
   "name": "voltverse",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Hands-on IoT and hardware project guides for university students — wiring, build steps, simulators, 3D benches, and compile-verified Arduino sketches.",
+  "author": "junaaid96",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/junaaid96/volt-verse.git"
+  },
+  "keywords": ["arduino", "esp32", "esp8266", "iot", "electronics", "education", "react", "vite", "threejs"],
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
+    "check:guides": "tsx scripts/check-guide-code.ts",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -33,6 +42,7 @@
     "@vitejs/plugin-react": "^6.1.2",
     "oxlint": "^1.88.0",
     "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15",
     "typescript": "~6.0.3",
     "vite": "^8.3.4"
   }

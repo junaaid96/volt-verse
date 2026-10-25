@@ -1,32 +1,74 @@
-# React + TypeScript + Vite
+# VoltVerse — University Hardware Project Hub
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Live site: <https://volt-verse-ums.vercel.app>
 
-Currently, two official plugins are available:
+Hands-on IoT and electronics project guides for university students. Each guide
+covers one build end to end: versions to choose from, components with
+street-price ranges, wiring maps, ordered build steps, a logic simulator, and
+Arduino sketches — per board (Uno, ESP32, NodeMCU, ESP32-CAM).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- 15 build guides (weather stations, health monitors, home automation, vehicle
+  tracking, access control, and more), each with Basic → Advanced versions
+- Per-board parts, wiring maps, and step text with board-specific details
+- 71 Arduino sketches, one per board/version, all compile-verified
+- Interactive 3D bench viewer, threshold-logic simulators, progress tracking,
+  bookmarks, dark mode, and print-to-PDF guides
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting started
 
-## Expanding the Oxlint configuration
+Requires Node.js 20+.
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev      # local dev server
+npm run build    # type-check + production build
+npm run lint     # oxlint
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Sketch verification
+
+Guide sketches live in `src/data/projects/*.ts` as `code` variants. Two checks
+keep them honest:
+
+```bash
+npm run check:guides              # sketch ↔ board/version pairing rules
+scripts/compile-sketches.sh       # compile every sketch with arduino-cli
+```
+
+Compiling needs `arduino-cli` with the `arduino:avr`, `esp32:esp32`, and
+`esp8266:esp8266` cores plus the guides' libraries (Adafruit Sensor/BME280/
+SSD1306/GFX, Blynk + BlynkESP8266_Lib, DallasTemperature, DHT, ESP32Servo,
+ESP_SSLClient, FirebaseClient, Keypad, LiquidCrystal I2C, LoRa, MFRC522,
+MPU6050, OneWire, PZEM004Tv30, RTClib, SD, Servo, SparkFun MAX3010x,
+ThingSpeak, TinyGPSPlus, U8g2, UniversalTelegramBot).
+
+`scripts/extract-sketches.ts` also reports versions a supported board has no
+sketch for — see the gap list before adding a new board to a guide.
+
+> Compiling proves the code builds, not that it works on real sensors. Several
+> sketches (notably the NodeMCU ports) still need flash-testing on hardware.
+
+## Layout
+
+- `src/data/projects/` — guide content: parts, wiring, steps, simulator, code
+- `src/data/guideView.ts` — board/version selection and sketch pairing logic
+- `src/components/board/` — 3D bench viewer · `src/components/sim/` — simulator
+- `src/pages/` — Home, Catalog, ProjectDetail · `scripts/` — sketch tooling
+
+## Contributing
+
+Issues and pull requests are welcome. New or changed sketches must pass
+`scripts/compile-sketches.sh`, and new guides should follow the shape of the
+existing entries in `src/data/projects/`.
+
+## Safety
+
+Some builds switch mains voltage or charge lithium cells. If you are unsure
+about relay isolation, fusing, or battery protection, build the low-voltage
+version first and ask someone experienced to review your wiring.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
