@@ -17,7 +17,7 @@ export function SheetsList({ keys }: { keys?: string[] }) {
           >
             <FileText className="h-5 w-5 shrink-0 text-fog dark:text-[#9bb0a0]" />
             <span className="min-w-0 flex-1">
-              <span className="block truncate text-sm font-semibold text-ink dark:text-[#e4ece5]">
+              <span className="block truncate text-sm font-semibold print:whitespace-normal text-ink dark:text-[#e4ece5]">
                 {s.label}
               </span>
               <span className="text-xs text-fog dark:text-[#9bb0a0]">

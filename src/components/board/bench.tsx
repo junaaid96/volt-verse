@@ -1,38 +1,43 @@
 import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
+import { RoundedBox } from '@react-three/drei'
 import { useReducedMotion } from 'framer-motion'
 import * as THREE from 'three'
 import type { PartKind } from '../../data/types'
-import { BB, breadTexture, labelTexture } from './textures'
+import { BB, breadTexture } from './textures'
 import type { V3 } from './layout'
 
 export function Breadboard({ position }: { position: V3 }) {
   const map = useMemo(() => breadTexture(), [])
   return (
     <group position={position}>
-      <mesh position={[0, 0.45, 0]}>
-        <boxGeometry args={[BB.w, 0.9, BB.h]} />
-        <meshStandardMaterial color="#e8eae6" roughness={0.6} />
-      </mesh>
+      <RoundedBox args={[BB.w, 0.9, BB.h]} radius={0.08} smoothness={3} position={[0, 0.45, 0]}>
+        <meshPhysicalMaterial color="#eceee9" roughness={0.55} clearcoat={0.15} clearcoatRoughness={0.6} />
+      </RoundedBox>
       <mesh rotation-x={-Math.PI / 2} position={[0, 0.906, 0]}>
-        <planeGeometry args={[BB.w, BB.h]} />
-        <meshStandardMaterial map={map} roughness={0.6} />
+        <planeGeometry args={[BB.w - 0.1, BB.h - 0.1]} />
+        <meshStandardMaterial map={map} roughness={0.62} />
       </mesh>
     </group>
   )
 }
 
-const leadMat = { color: '#c8ccd0', metalness: 0.8, roughness: 0.4 } as const
+const leadMat = { color: '#d0d4d8', metalness: 1, roughness: 0.3 } as const
 
-export function Led({ a, b, color = '#e5484d' }: { a: V3; b: V3; color?: string }) {
-  const mat = useRef<THREE.MeshStandardMaterial>(null!)
+/** Blinking 5 mm LED; a small point light makes it tint the breadboard like a real one. */
+export function Led({ a, b, color = '#ff3b30' }: { a: V3; b: V3; color?: string }) {
+  const mat = useRef<THREE.MeshPhysicalMaterial>(null!)
+  const glow = useRef<THREE.PointLight>(null!)
   const reduce = useReducedMotion()
   useFrame(({ clock }) => {
     if (!mat.current) return
-    mat.current.emissiveIntensity = reduce ? 1.6 : clock.elapsedTime % 1.6 < 0.8 ? 2.4 : 0.25
+    const on = reduce || clock.elapsedTime % 1.6 < 0.8
+    mat.current.emissiveIntensity = on ? 14 : 0.15
+    glow.current.intensity = on ? 1.6 : 0
   })
   const mx = (a[0] + b[0]) / 2
   const mz = (a[2] + b[2]) / 2
+  const top = a[1] + 0.62
   return (
     <group>
       {[a, b].map((p, i) => (
@@ -41,18 +46,25 @@ export function Led({ a, b, color = '#e5484d' }: { a: V3; b: V3; color?: string 
           <meshStandardMaterial {...leadMat} />
         </mesh>
       ))}
-      <mesh position={[mx, a[1] + 0.62, mz]} scale={[1, 1.35, 1]}>
-        <sphereGeometry args={[0.17, 18, 18]} />
-        <meshStandardMaterial
+      <mesh position={[mx, top - 0.14, mz]}>
+        <cylinderGeometry args={[0.2, 0.2, 0.05, 24]} />
+        <meshPhysicalMaterial color={color} roughness={0.15} transmission={0.4} thickness={0.2} />
+      </mesh>
+      <mesh position={[mx, top, mz]}>
+        <capsuleGeometry args={[0.17, 0.2, 8, 20]} />
+        <meshPhysicalMaterial
           ref={mat}
           color={color}
           emissive={color}
-          emissiveIntensity={1.6}
+          emissiveIntensity={14}
+          toneMapped={false}
+          roughness={0.12}
+          clearcoat={1}
           transparent
-          opacity={0.92}
-          roughness={0.3}
+          opacity={0.9}
         />
       </mesh>
+      <pointLight ref={glow} position={[mx, top + 0.1, mz]} color={color} intensity={1.6} distance={3} decay={2} />
     </group>
   )
 }
@@ -91,23 +103,95 @@ export function Resistor({ a, b }: { a: V3; b: V3 }) {
   )
 }
 
-// Jumper wires (static per composition → cached geometries, no leaks).
+// Jumper wires (static per composition → cached curves/geometries, no leaks).
+const curveCache = new Map<string, THREE.CatmullRomCurve3>()
 const tubeCache = new Map<string, THREE.TubeGeometry>()
 
-export function Wire({ points, color }: { points: V3[]; color: string }) {
-  const geo = useMemo(() => {
-    const key = `${color}|${JSON.stringify(points)}`
-    const hit = tubeCache.get(key)
-    if (hit) return hit
-    const curve = new THREE.CatmullRomCurve3(points.map((p) => new THREE.Vector3(...p)))
-    const g = new THREE.TubeGeometry(curve, 40, 0.035, 8)
-    tubeCache.set(key, g)
-    return g
-  }, [points, color])
+function wireCurve(points: V3[]): THREE.CatmullRomCurve3 {
+  const key = JSON.stringify(points)
+  const hit = curveCache.get(key)
+  if (hit) return hit
+  const curve = new THREE.CatmullRomCurve3(points.map((p) => new THREE.Vector3(...p)))
+  curveCache.set(key, curve)
+  return curve
+}
+
+function wireTube(points: V3[]): THREE.TubeGeometry {
+  const key = JSON.stringify(points)
+  const hit = tubeCache.get(key)
+  if (hit) return hit
+  const g = new THREE.TubeGeometry(wireCurve(points), 64, 0.042, 10)
+  tubeCache.set(key, g)
+  return g
+}
+
+/** Dupont jumper end: black housing sitting on the pin it plugs into. */
+function DupontEnd({ at }: { at: V3 }) {
   return (
-    <mesh geometry={geo}>
-      <meshStandardMaterial color={color} roughness={0.5} />
+    <mesh position={[at[0], at[1] + 0.22, at[2]]}>
+      <boxGeometry args={[0.2, 0.44, 0.2]} />
+      <meshStandardMaterial color="#121315" roughness={0.45} />
     </mesh>
+  )
+}
+
+export function Wire({ points, color }: { points: V3[]; color: string }) {
+  const geo = useMemo(() => wireTube(points), [points])
+  return (
+    <group>
+      <mesh geometry={geo}>
+        <meshPhysicalMaterial color={color} roughness={0.38} clearcoat={0.5} clearcoatRoughness={0.35} />
+      </mesh>
+      <DupontEnd at={points[0]} />
+      <DupontEnd at={points[points.length - 1]} />
+    </group>
+  )
+}
+
+/**
+ * Glowing charge pulses travelling along a wire. `direction` follows conventional
+ * current: +1 from the first point to the last, -1 back towards the board.
+ */
+export function FlowPulses({
+  points,
+  direction = 1,
+  color = '#ffd84d',
+  count = 4,
+}: {
+  points: V3[]
+  direction?: 1 | -1
+  color?: string
+  count?: number
+}) {
+  const curve = useMemo(() => wireCurve(points), [points])
+  const refs = useRef<Array<THREE.Mesh | null>>([])
+  const tmp = useMemo(() => new THREE.Vector3(), [])
+  // Over-range (HDR) colour so the bloom pass picks the pulses up.
+  const hdr = useMemo(() => new THREE.Color(color).multiplyScalar(6), [color])
+  useFrame(({ clock }) => {
+    const base = (clock.elapsedTime * 0.35) % 1
+    refs.current.forEach((m, i) => {
+      if (!m) return
+      let t = (base + i / count) % 1
+      if (direction < 0) t = 1 - t
+      curve.getPointAt(t, tmp)
+      m.position.copy(tmp)
+    })
+  })
+  return (
+    <group>
+      {Array.from({ length: count }, (_, i) => (
+        <mesh
+          key={i}
+          ref={(m) => {
+            refs.current[i] = m
+          }}
+        >
+          <sphereGeometry args={[0.09, 12, 12]} />
+          <meshBasicMaterial color={hdr} toneMapped={false} />
+        </mesh>
+      ))}
+    </group>
   )
 }
 
@@ -445,32 +529,29 @@ export function Sensor({ kind }: { kind: PartKind }) {
 }
 
 // ---------------------------------------------------------------------------
-// Floating callout: leader line + pill label (always faces camera).
+// Hotspot projector: each frame, pins the DOM labels rendered by
+// <HotspotLabels> onto their 3D anchors. Writing transforms through refs keeps
+// it off React's render path and needs no extra React roots.
 // ---------------------------------------------------------------------------
 
-export function Callout({ from, to, text }: { from: V3; to: V3; text: string }) {
-  const { tex, aspect } = useMemo(() => labelTexture(text), [text])
-  const line = useMemo(
-    () =>
-      new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(...from),
-        new THREE.Vector3(...to),
-      ]),
-    [from, to],
-  )
-  const H = 0.42
-  return (
-    <group>
-      <lineSegments geometry={line}>
-        <lineBasicMaterial color="#1e7a46" transparent opacity={0.8} />
-      </lineSegments>
-      <mesh position={from}>
-        <sphereGeometry args={[0.06, 10, 10]} />
-        <meshBasicMaterial color="#1e7a46" />
-      </mesh>
-      <sprite position={to} scale={[H * aspect, H, 1]} renderOrder={10}>
-        <spriteMaterial map={tex} transparent depthTest={false} />
-      </sprite>
-    </group>
-  )
+export function HotspotProjector({
+  points,
+  elements,
+}: {
+  points: V3[]
+  elements: React.RefObject<Array<HTMLElement | null>>
+}) {
+  const v = useMemo(() => new THREE.Vector3(), [])
+  useFrame(({ camera, size }) => {
+    points.forEach((p, i) => {
+      const el = elements.current[i]
+      if (!el) return
+      v.set(p[0], p[1], p[2]).project(camera)
+      const x = ((v.x + 1) / 2) * size.width
+      const y = ((1 - v.y) / 2) * size.height
+      el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`
+      el.style.visibility = v.z < 1 ? 'visible' : 'hidden'
+    })
+  })
+  return null
 }

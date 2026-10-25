@@ -1,5 +1,6 @@
-import { Component, Suspense, type ReactNode } from 'react'
+import { Component, Suspense, useEffect, useRef, useState, type ReactNode } from 'react'
 import { Canvas } from '@react-three/fiber'
+import * as THREE from 'three'
 
 function SceneFallback({ label }: { label: string }) {
   return (
@@ -29,28 +30,60 @@ class SceneErrorBoundary extends Component<{ children: ReactNode; label: string 
   }
 }
 
+/** Stop the render loop while the canvas is scrolled out of view (saves GPU + battery). */
+function useInView<T extends Element>() {
+  const ref = useRef<T>(null)
+  const [inView, setInView] = useState(true)
+  useEffect(() => {
+    const el = ref.current
+    if (!el || typeof IntersectionObserver === 'undefined') return
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { rootMargin: '120px' })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+  return { ref, inView }
+}
+
 export function SafeCanvas({
   children,
   label,
+  dpr = [1, 1.75],
   camera = { position: [0, 0.6, 7], fov: 45 },
 }: {
   children: ReactNode
   label: string
+  dpr?: number | [number, number]
   camera?: { position: [number, number, number]; fov: number }
 }) {
+  const { ref, inView } = useInView<HTMLDivElement>()
+  const [ready, setReady] = useState(false)
   return (
     <SceneErrorBoundary label={label}>
-      <Suspense fallback={<SceneFallback label={label} />}>
-        <Canvas
-          dpr={[1, 1.75]}
-          camera={camera}
-          shadows
-          gl={{ antialias: true, alpha: true }}
-          aria-label={label}
-        >
-          {children}
-        </Canvas>
-      </Suspense>
+      <div ref={ref} className="relative h-full w-full">
+        {!ready && (
+          <div className="labgrid absolute inset-0 flex items-center justify-center" aria-hidden="true">
+            <span className="bench-loading">Assembling the bench</span>
+          </div>
+        )}
+        <Suspense fallback={<SceneFallback label={label} />}>
+          <Canvas
+            dpr={dpr}
+            camera={camera}
+            shadows="percentage"
+            frameloop={inView ? 'always' : 'never'}
+            gl={{ antialias: true, powerPreference: 'high-performance' }}
+            onCreated={({ gl }) => {
+              gl.toneMapping = THREE.NeutralToneMapping
+              requestAnimationFrame(() => setReady(true))
+            }}
+            aria-label={label}
+            role="img"
+            className={`transition-opacity duration-700 ${ready ? 'opacity-100' : 'opacity-0'}`}
+          >
+            {children}
+          </Canvas>
+        </Suspense>
+      </div>
     </SceneErrorBoundary>
   )
 }

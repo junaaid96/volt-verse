@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Check, Copy } from 'lucide-react'
-import type { CodeVariant } from '../data/types'
+import type { BoardKind, CodeVariant } from '../data/types'
+import { BOARD_NAMES } from '../data/guideView'
 
 function Sketch({ variant }: { variant: CodeVariant }) {
   const lines = variant.code.split('\n').length
@@ -19,7 +20,17 @@ function Sketch({ variant }: { variant: CodeVariant }) {
   )
 }
 
-export function CodeBlock({ variants }: { variants: CodeVariant[] }) {
+function PortNotice({ from, to }: { from: BoardKind; to: BoardKind }) {
+  const target = BOARD_NAMES[to]
+  return (
+    <p role="note" className="mt-3 rounded-xl border border-amber/50 bg-amber/10 p-3 text-sm leading-relaxed text-fog dark:text-mist">
+      This sketch is written for the <strong className="text-ink dark:text-foam">{BOARD_NAMES[from]}</strong>. On the {target}, change the
+      pin numbers to match the {target} wiring map in section 3 and install the {target} board package before flashing.
+    </p>
+  )
+}
+
+export function CodeBlock({ variants, board }: { variants: CodeVariant[]; board: BoardKind }) {
   const [id, setId] = useState<string>(variants[0]?.id ?? '')
   const [copied, setCopied] = useState(false)
   const current = variants.find((v) => v.id === id) ?? variants[0]
@@ -59,9 +70,11 @@ export function CodeBlock({ variants }: { variants: CodeVariant[] }) {
               }`}
             >
               {v.label}
+              {v.board !== board && <span className="ml-1.5 text-xs opacity-75">({BOARD_NAMES[v.board]})</span>}
             </button>
           ))}
         </div>
+        {current.board !== board && <PortNotice from={current.board} to={board} />}
         <p className="mt-3 text-sm leading-relaxed text-fog dark:text-[#9bb0a0]">{current.note}</p>
         <Sketch variant={current} />
         <button

@@ -1,14 +1,15 @@
-import type { Project } from '../data/types'
+import type { BoardKind, Project } from '../data/types'
+import { BOARD_NAMES } from '../data/guideView'
 import { BoardViewer } from './board/BoardViewer'
-import { boardFor, defaultRigForScene } from './board/layout'
+import { defaultRigForScene } from './board/layout'
 
-export function ProjectScene({ project }: { project: Project }) {
+export function ProjectScene({ project, board }: { project: Project; board: BoardKind }) {
   return (
     <BoardViewer
-      board={boardFor(project.boards)}
+      board={board}
       rig={project.rig ?? defaultRigForScene(project.scene)}
-      className="h-[240px] w-full"
-      label={`Interactive 3D board view for ${project.title}`}
+      className="h-[340px] w-full lg:h-[380px]"
+      label={`Interactive 3D view of ${project.title} on ${BOARD_NAMES[board]}`}
     />
   )
 }

@@ -3,9 +3,10 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-display: "Iowan Old Style", Charter, Georgia, "Times New Roman", serif;
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-display: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-sans: "Atkinson Hyperlegible Next Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --color-teal: #2e9c94;
 
   --color-ink: #182420;
   --color-pine: #0d140f;
@@ -44,7 +45,142 @@ body {
 
 .font-display {
   font-family: var(--font-display);
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
+}
+
+/* Keyboard focus: always visible, never on mouse click. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-leaf);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.dark :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline-color: var(--color-leafbright);
+}
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+/* Soft workshop-lamp glow behind the hero bench. */
+.hero-glow {
+  background:
+    radial-gradient(60% 70% at 75% 45%, rgba(79, 196, 111, 0.16), transparent 70%),
+    radial-gradient(40% 50% at 10% 0%, rgba(240, 166, 58, 0.1), transparent 70%);
+}
+.dark .hero-glow {
+  background:
+    radial-gradient(60% 70% at 75% 45%, rgba(79, 196, 111, 0.12), transparent 70%),
+    radial-gradient(40% 50% at 10% 0%, rgba(240, 166, 58, 0.06), transparent 70%);
+}
+
+/* ---- 3D viewer -------------------------------------------------------- */
+
+.viewer:fullscreen {
+  height: 100dvh;
+  width: 100vw;
+  background: var(--color-paper);
+}
+
+.bench-loading {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-fog);
+  animation: bench-pulse 1.4s ease-in-out infinite;
+}
+@keyframes bench-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.hotspot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transform: translate(-7px, -50%);
+  white-space: nowrap;
+  user-select: none;
+}
+.hotspot-dot {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  flex: none;
+  border-radius: 999px;
+  background: var(--color-teal);
+  border: 2.5px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+.hotspot-dot::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: inherit;
+  border: 2px solid var(--color-teal);
+  animation: hotspot-ping 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes hotspot-ping {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  80%,
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+.hotspot-label {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  padding: 3px 8px;
+  box-shadow: 0 4px 14px -6px rgba(20, 40, 28, 0.4);
+}
+.dark .hotspot-label {
+  color: var(--color-foam);
+  background: rgba(22, 33, 26, 0.92);
+  border-color: var(--color-edge);
+}
+
+.dock-btn {
+  display: inline-flex;
+  height: 40px;
+  width: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  color: var(--color-ink);
+  transition: background-color 150ms ease, color 150ms ease, transform 150ms ease;
+}
+.dock-btn:hover {
+  background: var(--color-linelight);
+}
+.dock-btn:active {
+  transform: scale(0.92);
+}
+.dock-btn-on {
+  background: var(--color-palegreen);
+  color: var(--color-leaf);
+}
+.dark .dock-btn {
+  color: var(--color-foam);
+}
+.dark .dock-btn:hover {
+  background: #24352a;
+}
+.dark .dock-btn-on {
+  background: #1f3626;
+  color: var(--color-leafbright);
 }
 
 /* LCD readout used by simulators */
@@ -127,13 +263,14 @@ input[type="range"] {
   .print-only {
     display: block !important;
   }
+  /* Tailwind sizes are rem-based, so scale the root to shrink everything evenly. */
   html {
     scroll-behavior: auto;
     color-scheme: light;
+    font-size: 14px;
   }
   body {
     background: #fff !important;
-    font-size: 12px;
   }
   /* Browsers don't print backgrounds: never rely on them, never clip. */
   .overflow-x-auto,
@@ -153,8 +290,16 @@ input[type="range"] {
   .lcd {
     border-width: 2px;
   }
+  h1,
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
+  }
+  /* Rows, not whole tables: a long parts list may span pages without leaving a gap. */
   li,
-  table,
+  tr,
+  dl > div,
   svg {
     break-inside: avoid;
   }

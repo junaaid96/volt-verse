@@ -1,13 +1,21 @@
-import { Suspense, useEffect, useRef, type ReactNode } from 'react'
-import { useThree } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { PerformanceMonitor, type CameraControlsImpl } from '@react-three/drei'
 import { useReducedMotion } from 'framer-motion'
 import * as THREE from 'three'
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 import { SafeCanvas } from '../SafeCanvas'
+import { useTheme } from '../../hooks/theme'
 import { ArduinoUno, Esp32Cam, Esp32Dev, NodeMcu } from './boards'
-import { Breadboard, Callout, Led, Resistor, Sensor, Wire } from './bench'
+import { Breadboard, FlowPulses, HotspotProjector, Led, Resistor, Sensor, Wire } from './bench'
+import { HotspotLabels } from './HotspotLabels'
+import { CameraRig } from './CameraRig'
+import { lookHome } from './cameraPose'
+import { Stage } from './Stage'
+import { STAGE_THEMES } from './stageThemes'
+import { ViewerDock, type DockAction, type DockToggles } from './ViewerDock'
 import {
+  BENCH_LAYOUTS,
+  BOARD_HOTSPOTS,
+  CAMERA_HOME,
   CAM_DEF,
   ESP32_DEF,
   NODEMCU_DEF,
@@ -31,66 +39,16 @@ const BOARDS: Record<BoardKind, { Cmp: () => React.JSX.Element; def: BoardDef }>
   esp32cam: { Cmp: Esp32Cam, def: CAM_DEF },
 }
 
-const LAYOUTS: Record<BoardKind, { board: V3; bb: V3; sensor: V3 }> = {
-  uno: { board: [-3.9, 0, 0.2], bb: [3.9, 0, 0.3], sensor: [3.0, 0, 4.4] },
-  esp32: { board: [-3.3, 0, 0.2], bb: [3.6, 0, 0.3], sensor: [2.8, 0, 4.4] },
-  nodemcu: { board: [-3.2, 0, 0.2], bb: [3.6, 0, 0.3], sensor: [2.8, 0, 4.4] },
-  esp32cam: { board: [-3.0, 0, 0.2], bb: [3.6, 0, 0.3], sensor: [2.8, 0, 0.4 + 4.0] },
-}
-
-// Callouts in board-local coords (offset by the board position at render).
-const CALLOUTS: Record<BoardKind, Array<{ from: V3; to: V3; text: string }>> = {
-  uno: [
-    { from: [0.7, 0.75, 0.1], to: [-0.1, 3.0, 1.9], text: 'ATmega328P runs your code' },
-    { from: [-2.85, 0.6, -1.55], to: [-4.4, 1.8, -1.3], text: 'USB · 5V in' },
-    { from: [1.437, 1.05, -2.25], to: [2.7, 2.4, -2.8], text: 'D0–D13 digital pins' },
-  ],
-  esp32: [
-    { from: [-1.55, 0.5, 0], to: [-2.6, 2.5, 0.5], text: 'ESP32 · Wi-Fi + Bluetooth' },
-    { from: [-1.973, 0.8, 1.2], to: [-3.1, 1.4, 2.7], text: '3V3 logic only!' },
-    { from: [2.3, 0.4, 0], to: [3.7, 2.3, 0.7], text: 'USB serial + power' },
-  ],
-  nodemcu: [
-    { from: [-1.4, 0.5, 0], to: [-2.5, 2.5, 0.4], text: 'ESP8266 · Wi-Fi' },
-    { from: [-0.553, 0.8, -1.05], to: [0.8, 2.3, -2.5], text: 'D0–D8 + A0' },
-    { from: [2.1, 0.4, 0], to: [3.5, 2.2, 0.9], text: 'USB serial + power' },
-  ],
-  esp32cam: [
-    { from: [-1.2, 0.6, -0.4], to: [-2.5, 2.5, 0.1], text: 'OV2640 camera' },
-    { from: [0.2, 0.3, 0.5], to: [1.5, 2.1, 2.1], text: 'Flash LED' },
-    { from: [-1.273, 0.4, 1.0], to: [-2.9, 1.2, 2.9], text: 'UART + 5V' },
-  ],
-}
-
 const add = (a: V3, b: V3): V3 => [a[0] + b[0], a[1] + b[1], a[2] + b[2]]
 
-// Smaller boards get a closer camera so details stay readable.
-const CAM_POS: Record<BoardKind, [number, number, number]> = {
-  uno: [7.5, 6.5, 10.5],
-  esp32: [6.2, 5.4, 8.7],
-  nodemcu: [6.2, 5.4, 8.7],
-  esp32cam: [6.0, 5.2, 8.4],
+interface WireSpec {
+  points: V3[]
+  color: string
+  /** Conventional current direction along `points` (+1 forward, -1 reverse). */
+  flow: 1 | -1
 }
 
-/** Procedural studio reflections — no HDR download needed. */
-function StudioEnv() {
-  const gl = useThree((s) => s.gl)
-  const scene = useThree((s) => s.scene)
-  useEffect(() => {
-    const pmrem = new THREE.PMREMGenerator(gl)
-    const env = new RoomEnvironment()
-    const rt = pmrem.fromScene(env, 0.04)
-    scene.environment = rt.texture
-    return () => {
-      scene.environment = null
-      rt.dispose()
-      pmrem.dispose()
-    }
-  }, [gl, scene])
-  return null
-}
-
-/** Shadow flags for every mesh in the rig, without touching sprites/lines. */
+/** Shadow flags for every mesh in the rig, without touching DOM hotspots. */
 function Shadowed({ children }: { children: ReactNode }) {
   const ref = useRef<THREE.Group>(null!)
   useEffect(() => {
@@ -100,87 +58,106 @@ function Shadowed({ children }: { children: ReactNode }) {
         o.receiveShadow = true
       }
     })
-  }, [])
+  })
   return <group ref={ref}>{children}</group>
 }
 
-function Rig({ board, rig }: { board: BoardKind; rig: GuideRig }) {
-  const { Cmp, def } = BOARDS[board]
-  const L = LAYOUTS[board]
-  const [pwr, gnd, sig] = def.ports
+function useBenchWires(board: BoardKind, parts: Array<{ kind: PartKind; pos: V3 }>): WireSpec[] {
+  return useMemo(() => {
+    const L = BENCH_LAYOUTS[board]
+    const [pwr, gnd, sig] = BOARDS[board].def.ports
+    const wires: WireSpec[] = [
+      { points: arc(add(L.board, pwr.pos), add(L.bb, railHole(4, 2)), 1.2), color: pwr.color, flow: 1 },
+      { points: arc(add(L.board, gnd.pos), add(L.bb, railHole(4, 3)), 1.2), color: gnd.color, flow: -1 },
+      { points: arc(add(L.board, sig.pos), add(L.bb, hole(18, 'e')), 1.3), color: sig.color, flow: 1 },
+      { points: arc(add(L.bb, railHole(10, 3)), add(L.bb, hole(10, 'f')), 0.5), color: '#2470b7', flow: -1 },
+    ]
+    parts.forEach((p, i) => {
+      const leads = SENSOR_LEADS[p.kind]
+      const col = 20 + i * 2
+      wires.push(
+        { points: arc(add(L.bb, railHole(col, 2)), add(p.pos, leads[0]), 0.9), color: '#d43a2e', flow: 1 },
+        { points: arc(add(L.bb, railHole(col, 3)), add(p.pos, leads[1]), 0.9), color: '#22252a', flow: -1 },
+      )
+    })
+    return wires
+  }, [board, parts])
+}
 
-  const ledA = add(L.bb, hole(14, 'e'))
-  const ledB = add(L.bb, hole(14, 'f'))
-  const resA = add(L.bb, hole(18, 'e'))
-  const resB = add(L.bb, hole(14, 'e'))
+type BenchPart = { kind: PartKind; pos: V3 }
 
-  const parts: Array<{ kind: PartKind; pos: V3 }> = [
-    ...(rig.sensor ? [{ kind: rig.sensor, pos: L.sensor }] : []),
-    ...(rig.extras ?? []).map((kind, i) => ({
-      kind,
-      pos: [L.sensor[0] - 2.8 * (i + 1), 0, L.sensor[2] + 0.4] as V3,
-    })),
-  ]
+function useBenchParts(board: BoardKind, rig: GuideRig): BenchPart[] {
+  const rigKey = JSON.stringify(rig)
+  return useMemo(() => {
+    const L = BENCH_LAYOUTS[board]
+    const r = JSON.parse(rigKey) as GuideRig
+    return [
+      ...(r.sensor ? [{ kind: r.sensor, pos: L.sensor }] : []),
+      ...(r.extras ?? []).map((kind, i) => ({
+        kind,
+        pos: [L.sensor[0] - 2.8 * (i + 1), 0, L.sensor[2] + 0.4] as V3,
+      })),
+    ]
+  }, [board, rigKey])
+}
+
+function useHotspots(board: BoardKind, parts: BenchPart[]): Array<{ at: V3; text: string }> {
+  return useMemo(() => {
+    const L = BENCH_LAYOUTS[board]
+    return [
+      ...BOARD_HOTSPOTS[board].map((h) => ({ at: add(L.board, h.at), text: h.text })),
+      ...parts.map((p) => {
+        const leads = SENSOR_LEADS[p.kind]
+        const top: V3 = [p.pos[0], p.pos[1] + Math.max(leads[0][1], leads[1][1]) + 0.2, p.pos[2]]
+        return { at: top, text: SENSOR_NAMES[p.kind] }
+      }),
+      { at: [L.bb[0] + 1.8, 0.95, L.bb[2] - 1.2] as V3, text: 'Breadboard' },
+    ]
+  }, [board, parts])
+}
+
+function Rig({ board, parts, showFlow }: { board: BoardKind; parts: BenchPart[]; showFlow: boolean }) {
+  const { Cmp } = BOARDS[board]
+  const L = BENCH_LAYOUTS[board]
+  const wires = useBenchWires(board, parts)
 
   return (
-    <Shadowed>
-      <group position={L.board}>
-        <Cmp />
-      </group>
-      <Breadboard position={L.bb} />
-
-      {/* demo circuit: signal -> resistor -> LED -> ground rail */}
-      <Led a={ledA} b={ledB} />
-      <Resistor a={resA} b={resB} />
-      <Wire points={arc(add(L.board, pwr.pos), add(L.bb, railHole(4, 2)), 1.2)} color={pwr.color} />
-      <Wire points={arc(add(L.board, gnd.pos), add(L.bb, railHole(4, 3)), 1.2)} color={gnd.color} />
-      <Wire points={arc(add(L.board, sig.pos), add(L.bb, hole(18, 'e')), 1.3)} color={sig.color} />
-      <Wire
-        points={arc(add(L.bb, railHole(10, 3)), add(L.bb, hole(10, 'f')), 0.5)}
-        color="#2470b7"
-      />
-
-      {/* this guide's modules, wired to the rails */}
-      {parts.map((p, i) => {
-        const leads = SENSOR_LEADS[p.kind]
-        const col = 20 + i * 2
-        const top: V3 = [
-          p.pos[0] + (leads[0][0] + leads[1][0]) / 2,
-          p.pos[1] + Math.max(leads[0][1], leads[1][1]) + 0.15,
-          p.pos[2] + (leads[0][2] + leads[1][2]) / 2,
-        ]
-        return (
-          <group key={`${p.kind}-${i}`}>
-            <group position={p.pos}>
-              <Sensor kind={p.kind} />
-            </group>
-            <Wire
-              points={arc(add(L.bb, railHole(col, 2)), add(p.pos, leads[0]), 0.9)}
-              color="#d43a2e"
-            />
-            <Wire
-              points={arc(add(L.bb, railHole(col, 3)), add(p.pos, leads[1]), 0.9)}
-              color="#22252a"
-            />
-            <Callout
-              from={top}
-              to={[top[0] + (i === 0 ? 0.8 : -1.5), top[1] + 1.7, top[2] + 1.3]}
-              text={SENSOR_NAMES[p.kind]}
-            />
+    <>
+      <Shadowed>
+        <group position={L.board}>
+          <Cmp />
+        </group>
+        <Breadboard position={L.bb} />
+        {/* demo circuit: signal -> resistor -> LED -> ground rail */}
+        <Led a={add(L.bb, hole(14, 'e'))} b={add(L.bb, hole(14, 'f'))} />
+        <Resistor a={add(L.bb, hole(18, 'e'))} b={add(L.bb, hole(14, 'e'))} />
+        {wires.map((w, i) => (
+          <Wire key={i} points={w.points} color={w.color} />
+        ))}
+        {parts.map((p, i) => (
+          <group key={`${p.kind}-${i}`} position={p.pos}>
+            <Sensor kind={p.kind} />
           </group>
-        )
-      })}
+        ))}
+      </Shadowed>
 
-      {CALLOUTS[board].map((c, i) => (
-        <Callout key={i} from={add(L.board, c.from)} to={add(L.board, c.to)} text={c.text} />
-      ))}
-      <Callout
-        from={[L.bb[0] - 1.5, 0.95, L.bb[2] + 1.2]}
-        to={[L.bb[0] - 2.2, 2.3, L.bb[2] + 3.2]}
-        text="Solderless breadboard"
-      />
-    </Shadowed>
+      {showFlow && wires.map((w, i) => <FlowPulses key={i} points={w.points} direction={w.flow} />)}
+    </>
   )
+}
+
+function useFullscreen(target: React.RefObject<HTMLElement | null>) {
+  const [active, setActive] = useState(false)
+  useEffect(() => {
+    const onChange = () => setActive(document.fullscreenElement === target.current)
+    document.addEventListener('fullscreenchange', onChange)
+    return () => document.removeEventListener('fullscreenchange', onChange)
+  }, [target])
+  const toggle = useCallback(() => {
+    if (document.fullscreenElement) void document.exitFullscreen()
+    else void target.current?.requestFullscreen?.()
+  }, [target])
+  return { active, toggle }
 }
 
 export function BoardViewer({
@@ -188,58 +165,79 @@ export function BoardViewer({
   rig,
   className = 'h-[240px] w-full',
   label,
+  showDock = true,
 }: {
   board: BoardKind
   rig: GuideRig
   className?: string
   label: string
+  showDock?: boolean
 }) {
-  const reduce = useReducedMotion()
+  const reduce = useReducedMotion() ?? false
+  const { theme } = useTheme()
+  const container = useRef<HTMLDivElement>(null)
+  const controls = useRef<CameraControlsImpl | null>(null)
+  const lastInput = useRef(0)
+  const fullscreen = useFullscreen(container)
+  const [highQuality, setHighQuality] = useState(true)
+  const [toggles, setToggles] = useState({ labels: true, flow: false, spin: !reduce })
+
+  const home = CAMERA_HOME[board]
+  const stageTheme = STAGE_THEMES[theme === 'dark' ? 'dark' : 'light']
+  const parts = useBenchParts(board, rig)
+  const hotspots = useHotspots(board, parts)
+  const hotspotPoints = useMemo(() => hotspots.map((h) => h.at), [hotspots])
+  const hotspotEls = useRef<Array<HTMLElement | null>>([])
+
+  const onAction = useCallback(
+    (a: DockAction) => {
+      const c = controls.current
+      if (!c) return
+      lastInput.current = performance.now()
+      const smooth = !reduce
+      if (a === 'rotateLeft') void c.rotate(-Math.PI / 4, 0, smooth)
+      else if (a === 'rotateRight') void c.rotate(Math.PI / 4, 0, smooth)
+      else if (a === 'zoomIn') void c.dolly(2.5, smooth)
+      else if (a === 'zoomOut') void c.dolly(-2.5, smooth)
+      else void lookHome(c, home, smooth)
+    },
+    [home, reduce],
+  )
+
+  const onToggle = useCallback(
+    (t: keyof DockToggles) => {
+      if (t === 'fullscreen') fullscreen.toggle()
+      else setToggles((s) => ({ ...s, [t]: !s[t] }))
+    },
+    [fullscreen],
+  )
+
   return (
-    <div className={`relative ${className}`}>
-      <SafeCanvas label={label} camera={{ position: CAM_POS[board], fov: 36 }}>
-        <StudioEnv />
-        <hemisphereLight args={['#ffffff', '#8a9a8f', 0.75]} />
-        <directionalLight
-          position={[6, 9, 5]}
-          intensity={1.7}
-          castShadow
-          shadow-mapSize-width={2048}
-          shadow-mapSize-height={2048}
-          shadow-camera-left={-10}
-          shadow-camera-right={10}
-          shadow-camera-top={10}
-          shadow-camera-bottom={-10}
-          shadow-camera-near={1}
-          shadow-camera-far={30}
-          shadow-bias={-0.0002}
-          shadow-normalBias={0.02}
-        />
-        <directionalLight position={[-6, 4, -3]} intensity={0.45} />
+    <div ref={container} className={`viewer relative ${className}`}>
+      <SafeCanvas label={label} dpr={highQuality ? [1, 1.75] : 1} camera={{ position: home.direction, fov: 32 }}>
+        <PerformanceMonitor onDecline={() => setHighQuality(false)} />
+        <Stage theme={stageTheme} sceneKey={`${board}-${JSON.stringify(rig)}`} effects={highQuality} />
         <Suspense fallback={null}>
-          <Rig board={board} rig={rig} />
+          <Rig board={board} parts={parts} showFlow={toggles.flow} />
         </Suspense>
-        <mesh rotation-x={-Math.PI / 2} position={[0, -0.02, 0]} receiveShadow>
-          <planeGeometry args={[40, 40]} />
-          <shadowMaterial opacity={0.22} />
-        </mesh>
-        <OrbitControls
-          makeDefault
-          enableDamping
-          dampingFactor={0.1}
-          autoRotate={!reduce}
-          autoRotateSpeed={0.7}
-          minDistance={5}
-          maxDistance={24}
-          minPolarAngle={0.15}
-          maxPolarAngle={1.42}
-          target={[0, 0.3, 0.5]}
-          enablePan
+        {toggles.labels && <HotspotProjector points={hotspotPoints} elements={hotspotEls} />}
+        <CameraRig
+          controlsRef={controls}
+          lastInputRef={lastInput}
+          home={home}
+          autoRotate={toggles.spin}
+          animate={!reduce}
+          expanded={fullscreen.active}
         />
       </SafeCanvas>
-      <span className="print-hide pointer-events-none absolute bottom-2 right-3 text-[11px] text-fog dark:text-[#9bb0a0]">
-        drag to orbit · scroll to zoom
-      </span>
+      {toggles.labels && <HotspotLabels labels={hotspots.map((h) => h.text)} elements={hotspotEls} />}
+      {showDock && (
+        <ViewerDock
+          toggles={{ ...toggles, fullscreen: fullscreen.active }}
+          onAction={onAction}
+          onToggle={onToggle}
+        />
+      )}
     </div>
   )
 }

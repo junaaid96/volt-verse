@@ -40,11 +40,14 @@ function pcbGeometry(w: number, h: number, r = 0.2): THREE.ExtrudeGeometry {
   return geo
 }
 
+// Solder mask is a thin glossy lacquer over FR4: rough base + clearcoat.
+const solderMask = { roughness: 0.6, clearcoat: 0.7, clearcoatRoughness: 0.28 } as const
+
 function Pcb({ w, h, color }: { w: number; h: number; color: string }) {
   const geo = useMemo(() => pcbGeometry(w, h), [w, h])
   return (
     <mesh geometry={geo} rotation-x={-Math.PI / 2}>
-      <meshStandardMaterial color={color} roughness={0.5} metalness={0.15} />
+      <meshPhysicalMaterial color={color} {...solderMask} />
     </mesh>
   )
 }
@@ -53,7 +56,7 @@ function Silk({ w, h, map }: { w: number; h: number; map: THREE.Texture }) {
   return (
     <mesh rotation-x={-Math.PI / 2} position={[0, PCB_TOP + 0.006, 0]}>
       <planeGeometry args={[w, h]} />
-      <meshStandardMaterial map={map} roughness={0.55} metalness={0.08} />
+      <meshPhysicalMaterial map={map} {...solderMask} />
     </mesh>
   )
 }
@@ -85,7 +88,7 @@ function HeaderStrip({
         <mesh key={i} position={[x0 + 0.127 + i * PITCH, PCB_TOP + h + 0.005, z]}>
           <boxGeometry args={[0.13, 0.03, 0.15]} />
           {gold ? (
-            <meshStandardMaterial color="#c9a227" roughness={0.35} metalness={0.9} />
+            <meshStandardMaterial {...goldMat} />
           ) : (
             <meshStandardMaterial color="#050505" roughness={0.9} />
           )}
@@ -95,9 +98,36 @@ function HeaderStrip({
   )
 }
 
-const silver = { color: '#c8ccd0', roughness: 0.32, metalness: 0.9 } as const
-const goldMat = { color: '#c9a227', roughness: 0.35, metalness: 0.9 } as const
-const blackPlastic = { color: '#17191d', roughness: 0.55 } as const
+const silver = { color: '#d5d9dd', roughness: 0.26, metalness: 1 } as const
+const goldMat = { color: '#e0b34a', roughness: 0.24, metalness: 1 } as const
+const blackPlastic = { color: '#17191d', roughness: 0.5 } as const
+
+/** USB-B cable leaving the Uno's port and draping off the bench. */
+function UsbCable() {
+  const geo = useMemo(() => {
+    const curve = new THREE.CatmullRomCurve3(
+      [
+        [-4.2, PCB_TOP + 0.425, -1.55],
+        [-5.2, PCB_TOP + 0.4, -1.6],
+        [-6.2, 0.25, -2.4],
+        [-7.4, 0.12, -4.2],
+        [-8.6, 0.12, -6.8],
+      ].map((p) => new THREE.Vector3(...(p as [number, number, number]))),
+    )
+    return new THREE.TubeGeometry(curve, 64, 0.16, 12)
+  }, [])
+  return (
+    <group>
+      <mesh position={[-3.85, PCB_TOP + 0.425, -1.55]}>
+        <boxGeometry args={[0.7, 0.7, 0.95]} />
+        <meshStandardMaterial color="#2a2d31" roughness={0.5} />
+      </mesh>
+      <mesh geometry={geo}>
+        <meshPhysicalMaterial color="#2a2d31" roughness={0.45} clearcoat={0.3} />
+      </mesh>
+    </group>
+  )
+}
 
 // ---------------------------------------------------------------------------
 // Arduino Uno R3 (6.86 x 5.34)
@@ -134,10 +164,7 @@ export function ArduinoUno() {
         <boxGeometry args={[1.3, 0.85, 1.15]} />
         <meshStandardMaterial {...silver} />
       </mesh>
-      <mesh position={[-3.5, PCB_TOP + 0.425, -1.55]}>
-        <boxGeometry args={[0.08, 0.5, 0.85]} />
-        <meshStandardMaterial color="#0a0a0c" roughness={0.8} />
-      </mesh>
+      <UsbCable />
       {/* ATmega16U2 serial converter */}
       <mesh position={[-1.55, PCB_TOP + 0.06, -0.85]}>
         <boxGeometry args={[0.7, 0.12, 0.7]} />

@@ -1,30 +1,35 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
+import { guideKeys } from '../data/guideView'
 import { useLocalStorage } from './useLocalStorage'
 
-/** Per-project build-step checklist, persisted in localStorage. */
-export function useSteps(slug: string, count: number) {
-  const [raw, setRaw] = useLocalStorage<boolean[]>(`vv-steps-${slug}`, [])
+export type StepProgress = Record<string, true>
 
-  const done = useMemo(() => {
-    const arr = Array.from({ length: count }, (_, i) => raw[i] === true)
-    return arr
-  }, [raw, count])
+/** Build-step checklist keyed by step id, so progress survives version/board filtering. */
+export function useSteps(slug: string, ids: string[]) {
+  const [progress, setRaw] = useLocalStorage<StepProgress>(guideKeys(slug).progress, {})
 
   const toggle = useCallback(
-    (i: number) => {
+    (id: string) => {
       setRaw((prev) => {
-        const next = Array.from({ length: count }, (_, k) => prev[k] === true)
-        next[i] = !next[i]
+        const next: StepProgress = { ...prev }
+        if (next[id]) delete next[id]
+        else next[id] = true
         return next
       })
     },
-    [count, setRaw],
+    [setRaw],
   )
 
-  const reset = useCallback(() => setRaw([]), [setRaw])
+  const reset = useCallback(() => {
+    setRaw((prev) => {
+      const next: StepProgress = { ...prev }
+      ids.forEach((id) => delete next[id])
+      return next
+    })
+  }, [ids, setRaw])
 
-  const finished = done.filter(Boolean).length
-  const pct = count === 0 ? 0 : Math.round((finished / count) * 100)
+  const finished = ids.filter((id) => progress[id]).length
+  const pct = ids.length === 0 ? 0 : Math.round((finished / ids.length) * 100)
 
-  return { done, toggle, reset, finished, pct }
+  return { isDone: (id: string) => progress[id] === true, toggle, reset, finished, pct }
 }

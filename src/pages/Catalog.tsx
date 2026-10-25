@@ -64,7 +64,7 @@ export function Catalog() {
   const isDefault = JSON.stringify(filters) === JSON.stringify(DEFAULTS) && !savedOnly
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pt-8">
+    <div className="mx-auto max-w-7xl px-4 pt-8">
       <h1 className="font-display text-3xl font-bold text-ink dark:text-[#e4ece5]">Project guides</h1>
       <p className="mt-1 text-sm text-fog dark:text-[#9bb0a0]">
         {results.length} of {projects.length} guides

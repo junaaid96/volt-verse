@@ -277,35 +277,58 @@ export function breadTexture(): THREE.CanvasTexture {
 }
 
 // ---------------------------------------------------------------------------
-// Floating pill labels (callouts)
+// Self-healing cutting mat (one 10 cm tile, repeated across the bench)
 // ---------------------------------------------------------------------------
 
-const labelCache = new Map<string, { tex: THREE.CanvasTexture; aspect: number }>()
+export interface MatPalette {
+  base: string
+  minor: string
+  major: string
+}
 
-export function labelTexture(text: string): { tex: THREE.CanvasTexture; aspect: number } {
-  const hit = labelCache.get(text)
+const matCache = new Map<string, THREE.CanvasTexture>()
+
+export function matTexture(p: MatPalette, repeat: number): THREE.CanvasTexture {
+  const key = `${p.base}|${p.minor}|${p.major}|${repeat}`
+  const hit = matCache.get(key)
   if (hit) return hit
-  const fs = 46
-  const pad = 30
-  const meas = document.createElement('canvas').getContext('2d')!
-  meas.font = `600 ${fs}px system-ui, sans-serif`
-  const w = Math.ceil(meas.measureText(text).width) + pad * 2
-  const h = fs + pad * 1.6
+  const size = 1024
   const c = document.createElement('canvas')
-  c.width = w * 2
-  c.height = h * 2
+  c.width = size
+  c.height = size
   const ctx = c.getContext('2d')!
-  ctx.scale(2, 2)
-  ctx.beginPath()
-  ctx.roundRect(0, 0, w, h, h / 2)
-  ctx.fillStyle = 'rgba(18,32,24,0.9)'
-  ctx.fill()
-  ctx.font = `600 ${fs}px system-ui, sans-serif`
-  ctx.fillStyle = '#ffffff'
-  ctx.textBaseline = 'middle'
-  ctx.fillText(text, pad, h / 2 + 2)
-  const tex = finish(c)
-  const out = { tex, aspect: w / h }
-  labelCache.set(text, out)
-  return out
+  ctx.fillStyle = p.base
+  ctx.fillRect(0, 0, size, size)
+
+  // Fine speckle so the surface never reads as flat CG plastic.
+  let seed = 11
+  const rnd = () => {
+    seed = (seed * 16807) % 2147483647
+    return seed / 2147483647
+  }
+  for (let i = 0; i < 9000; i++) {
+    ctx.fillStyle = rnd() > 0.5 ? 'rgba(255,255,255,0.035)' : 'rgba(0,0,0,0.04)'
+    ctx.fillRect(rnd() * size, rnd() * size, 2, 2)
+  }
+
+  const step = size / 10
+  for (let i = 0; i <= 10; i++) {
+    const major = i % 5 === 0
+    ctx.strokeStyle = major ? p.major : p.minor
+    ctx.lineWidth = major ? 3 : 1.5
+    const o = i * step
+    ctx.beginPath()
+    ctx.moveTo(o, 0)
+    ctx.lineTo(o, size)
+    ctx.moveTo(0, o)
+    ctx.lineTo(size, o)
+    ctx.stroke()
+  }
+
+  const t = finish(c)
+  t.wrapS = THREE.RepeatWrapping
+  t.wrapT = THREE.RepeatWrapping
+  t.repeat.set(repeat, repeat)
+  matCache.set(key, t)
+  return t
 }

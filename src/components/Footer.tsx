@@ -11,7 +11,7 @@ export function Footer() {
 
   return (
     <footer className="print-hide mt-16 border-t border-line dark:border-[#24352a]">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-10 md:grid-cols-3">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-10 md:grid-cols-3">
         <div>
           <Logo compact />
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-fog dark:text-[#9bb0a0]">
@@ -59,7 +59,7 @@ export function Footer() {
         </nav>
       </div>
       <div className="border-t border-line dark:border-[#24352a]">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-4 py-4 text-xs text-fog sm:flex-row sm:justify-between dark:text-[#9bb0a0]">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 px-4 py-4 text-xs text-fog sm:flex-row sm:justify-between dark:text-[#9bb0a0]">
           <span className="text-center sm:text-left">VoltVerse · built for coursework and final-year projects</span>
           <a
               href="https://junaidul.pro.bd/codejborg"

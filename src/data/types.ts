@@ -1,5 +1,20 @@
 export type Difficulty = 'Basic' | 'Medium' | 'Advanced'
 
+/** Controller boards a guide can be built on (one per 3D bench). */
+export type BoardKind = 'uno' | 'esp32' | 'nodemcu' | 'esp32cam'
+
+/**
+ * Scoping shared by parts, wiring and steps.
+ * `versions`: BuildOption ids the item belongs to — omitted means every version.
+ * `boards`: boards the item applies to — omitted means every board.
+ */
+export interface Scoped {
+  versions?: string[]
+  boards?: BoardKind[]
+}
+
+export type BoardSupport = { ok: true; note?: string } | { ok: false; reason: string }
+
 export type SceneKind =
   | 'field'
   | 'home'
@@ -43,7 +58,7 @@ export interface BuildOption {
   cost: string
 }
 
-export interface Part {
+export interface Part extends Scoped {
   name: string
   qty: string
   role: string
@@ -55,23 +70,30 @@ export interface WirePin {
   to: string
 }
 
-export interface WireBoard {
+/** A pin map. Give `boards` for controller-specific maps; omit it for shared ones (power, mains, flashing rigs). */
+export interface WireBoard extends Scoped {
   id: string
   label: string
   board: string
   pins: WirePin[]
 }
 
-export interface BuildStep {
+export interface BuildStep extends Scoped {
+  /** Stable key for saved progress — never reuse or renumber. */
+  id: string
   title: string
   detail: string
+  /** Board-specific replacement for `detail` (pin numbers, flashing, core install). */
+  boardDetail?: Partial<Record<BoardKind, string>>
 }
 
-export interface CodeVariant {
+export interface CodeVariant extends Omit<Scoped, 'boards'> {
   id: string
   label: string
   note: string
   code: string
+  /** Board the sketch compiles for; pins must match that board's wiring map. */
+  board: BoardKind
 }
 
 export interface SimSlider {
@@ -103,6 +125,10 @@ export interface SimConfig {
   /** primary slider the rule watches */
   watch: string
   rule: 'below' | 'above'
+  /** Firmware's hysteresis band in watched units (release = threshold ± band). Omitted = plain threshold. */
+  band?: number
+  /** Trip at the threshold itself (firmware uses >= / <=) instead of strictly past it. */
+  inclusive?: boolean
   actuator: string
   onText: string
   offText: string
@@ -136,6 +162,10 @@ export interface Project {
   weeks: string
   cost: string
   boards: string[]
+  /** Board the guide opens on. */
+  defaultBoard: BoardKind
+  /** Whether each bench board can run this build, and why not when it can't. */
+  support: Record<BoardKind, BoardSupport>
   skills: string[]
   scene: SceneKind
   updated: string

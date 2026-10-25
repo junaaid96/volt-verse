@@ -3,19 +3,24 @@ import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Bookmark, BookmarkCheck, CalendarClock, Cpu, Link2, Printer, Wallet } from 'lucide-react'
 import { getProject, projects } from '../data/projects'
 import { getCategory } from '../data/categories'
+import { BOARD_NAMES, guideKeys, resolveSelection, selectGuide, supportedBoards, unsupportedBoards } from '../data/guideView'
+import type { BoardKind } from '../data/types'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useBookmarks } from '../hooks/bookmarks'
+import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { DifficultyBadge } from '../components/DifficultyBadge'
 import { StepsTracker } from '../components/StepsTracker'
-
-const ProjectScene = lazy(() =>
-  import('../components/ProjectScene').then((m) => ({ default: m.ProjectScene })),
-)
+import { BenchSwitcher } from '../components/BenchSwitcher'
+import { BuildSelector, NotSuitableList, SectionBoardBar } from '../components/BuildSelector'
 import { Simulator } from '../components/Simulator'
 import { WiringDiagram } from '../components/WiringDiagram'
 import { CodeBlock } from '../components/CodeBlock'
 import { SheetsList } from '../components/SheetsList'
 import { NotFound } from './NotFound'
+
+const ProjectScene = lazy(() =>
+  import('../components/ProjectScene').then((m) => ({ default: m.ProjectScene })),
+)
 
 const SECTIONS = [
   ['versions', 'Versions'],
@@ -36,7 +41,7 @@ const scrollTo = (id: string) => {
 function SectionHead({ n, title, blurb }: { n: string; title: string; blurb?: string }) {
   return (
     <div className="mb-4">
-      <h2 className="font-display text-2xl font-bold text-ink dark:text-[#e4ece5]">
+      <h2 className="font-display text-3xl font-bold text-ink dark:text-foam">
         <span className="mr-2 text-leaf/70 dark:text-leafbright/70">{n}.</span>
         {title}
       </h2>
@@ -54,9 +59,12 @@ export function ProjectDetail() {
 function DetailView({ slug }: { slug: string }) {
   const project = getProject(slug)
   const { has, toggle } = useBookmarks()
-  const [optId, setOptId] = useLocalStorage<string>(`vv-opt-${slug}`, '')
+  const keys = guideKeys(slug)
+  const [optId, setOptId] = useLocalStorage<string>(keys.version, '')
+  const [boardId, setBoardId] = useLocalStorage<BoardKind | ''>(keys.board, '')
   const [wireId, setWireId] = useState<string>('')
   const [copied, setCopied] = useState(false)
+  useDocumentTitle(project && `${project.title} · VoltVerse lab guide`)
 
   if (!project) return <NotFound />
 
@@ -66,8 +74,15 @@ function DetailView({ slug }: { slug: string }) {
   const category = getCategory(project.categoryId)
   const saved = has(project.slug)
 
-  const option = project.options.find((o) => o.id === optId) ?? project.options[0]
-  const wiring = project.wiring.find((w) => w.id === wireId) ?? project.wiring[0]
+  const sel = resolveSelection(project, optId, boardId || undefined)
+  const view = selectGuide(project, sel)
+  const option = project.options.find((o) => o.id === sel.version) ?? project.options[0]
+  const wiring = view.wiring.find((w) => w.id === wireId) ?? view.wiring[0]
+  const boardName = BOARD_NAMES[sel.board]
+  const boards = supportedBoards(project)
+  const benchOptions = boards.map((b) => ({ board: b, name: BOARD_NAMES[b] }))
+  const notSuitable = unsupportedBoards(project)
+  const boardBar = <SectionBoardBar options={benchOptions} board={sel.board} onBoard={setBoardId} option={option} />
 
   const copyLink = async () => {
     try {
@@ -83,27 +98,40 @@ function DetailView({ slug }: { slug: string }) {
     <div>
       {/* Sub-nav */}
       <div className="print-hide sticky top-16 z-30 border-b border-line bg-paper/95 backdrop-blur dark:border-[#24352a] dark:bg-pine/95">
-        <div className="scrollthin mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4 py-2">
-          {SECTIONS.map(([id, label], i) => (
-            <button
-              key={id}
-              type="button"
-              onClick={() => scrollTo(id)}
-              className="shrink-0 rounded-lg px-3 py-1.5 text-sm text-fog transition-colors hover:bg-linelight hover:text-ink dark:text-[#9bb0a0] dark:hover:bg-moss dark:hover:text-white"
-            >
-              <span className="mr-1 font-mono text-xs text-leaf/70 dark:text-leafbright/70">{i + 1}</span>
-              {label}
-            </button>
-          ))}
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2">
+          <nav aria-label="Guide sections" className="scrollthin -mx-1 flex min-w-[min(100%,30rem)] flex-1 gap-1 overflow-x-auto px-1">
+            {SECTIONS.map(([id, label], i) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => scrollTo(id)}
+                className="shrink-0 rounded-lg px-3 py-1.5 text-sm text-fog transition-colors hover:bg-linelight hover:text-ink dark:text-[#9bb0a0] dark:hover:bg-moss dark:hover:text-white"
+              >
+                <span className="mr-1 font-mono text-xs text-leaf/70 dark:text-leafbright/70">{i + 1}</span>
+                {label}
+              </button>
+            ))}
+          </nav>
+          <BuildSelector
+            boards={boards}
+            board={sel.board}
+            onBoard={setBoardId}
+            options={project.options}
+            version={sel.version}
+            onVersion={setOptId}
+          />
         </div>
       </div>
 
-      <article className="mx-auto max-w-6xl px-4 pt-6">
+      <article className="mx-auto max-w-7xl px-4 pt-6">
         <div className="print-only mb-2 border-b border-line pb-3">
           <p className="font-display text-lg font-bold">VoltVerse lab guide · {project.title}</p>
           <p className="text-xs text-fog">
             Printed {new Date().toLocaleDateString()} · {project.difficulty} · {project.weeks} ·{' '}
             {project.cost}
+          </p>
+          <p className="mt-1 text-sm">
+            Board: <strong>{boardName}</strong> · Version: <strong>{option.title}</strong>
           </p>
         </div>
         <nav className="print-hide text-sm text-fog dark:text-[#9bb0a0]" aria-label="Breadcrumb">
@@ -114,7 +142,7 @@ function DetailView({ slug }: { slug: string }) {
           / <span className="text-ink dark:text-[#e4ece5]">{project.title}</span>
         </nav>
 
-        <div className="mt-4 grid gap-6 lg:grid-cols-5">
+        <div className="mt-4 grid grid-cols-1 gap-6 lg:grid-cols-5">
           <div className="lg:col-span-3">
             <div className="flex flex-wrap items-center gap-2">
               <DifficultyBadge level={project.difficulty} />
@@ -127,7 +155,7 @@ function DetailView({ slug }: { slug: string }) {
                 <CalendarClock className="h-3.5 w-3.5" /> Updated {project.updated}
               </span>
             </div>
-            <h1 className="font-display mt-3 text-3xl font-bold leading-tight text-ink sm:text-4xl dark:text-[#e4ece5]">
+            <h1 className="font-display mt-3 text-4xl font-bold leading-[1.05] text-ink text-balance sm:text-5xl dark:text-foam">
               {project.title}
             </h1>
             <p className="mt-2 leading-relaxed text-fog dark:text-[#9bb0a0]">{project.tagline}</p>
@@ -189,20 +217,32 @@ function DetailView({ slug }: { slug: string }) {
             </div>
           </div>
           <div className="print-hide lg:col-span-2">
-            <div className="overflow-hidden rounded-xl border border-line bg-card dark:border-[#2f4234] dark:bg-moss">
-              <Suspense fallback={<div className="labgrid h-[240px] w-full" />}>
-                <ProjectScene project={project} />
+            <div className="overflow-hidden rounded-2xl border border-line bg-card shadow-[0_24px_50px_-30px_rgba(20,40,28,0.45)] dark:border-edge dark:bg-moss">
+              <div className="flex flex-wrap items-center gap-2 border-b border-line px-3 py-2.5 dark:border-edge">
+                <BenchSwitcher options={benchOptions} active={sel.board} onSelect={setBoardId} />
+              </div>
+              <Suspense fallback={<div className="labgrid h-[340px] w-full lg:h-[380px]" />}>
+                <ProjectScene project={project} board={sel.board} />
               </Suspense>
             </div>
-            <p className="mt-2 text-center text-xs text-fog dark:text-[#9bb0a0]">
-              Interactive 3D overview of this build.
+            <p className="mt-2 text-center text-xs text-fog dark:text-mist">
+              The board you pick here sets the parts, wiring, steps and code below.
             </p>
+            {notSuitable.length > 0 && (
+              <div className="mt-3">
+                <NotSuitableList items={notSuitable} />
+              </div>
+            )}
           </div>
         </div>
 
         {/* 1 Versions */}
         <section id="versions" className="mt-10 scroll-mt-32">
-          <SectionHead n="1" title="Choose your version" blurb="Same project, three depths. Your pick is remembered on this device." />
+          <SectionHead
+            n="1"
+            title="Choose your version"
+            blurb="Your pick updates the parts, steps and code below and is remembered on this device."
+          />
           <div className="grid gap-3 md:grid-cols-3">
             {project.options.map((o) => {
               const active = option?.id === o.id
@@ -212,10 +252,10 @@ function DetailView({ slug }: { slug: string }) {
                   type="button"
                   onClick={() => setOptId(o.id)}
                   aria-pressed={active}
-                  className={`rounded-xl border p-4 text-left transition-colors ${
+                  className={`break-inside-avoid rounded-xl border p-4 text-left transition-colors ${
                     active
                       ? 'border-leaf bg-palegreen/40 dark:border-leafbright dark:bg-[#1f3626]/40'
-                      : 'border-line bg-card hover:border-leaf dark:border-[#2f4234] dark:bg-moss'
+                      : 'print-hide border-line bg-card hover:border-leaf dark:border-[#2f4234] dark:bg-moss'
                   }`}
                 >
                   <span className="text-xs font-bold uppercase tracking-wide text-leaf dark:text-leafbright">{o.level}</span>
@@ -239,7 +279,8 @@ function DetailView({ slug }: { slug: string }) {
 
         {/* 2 Parts */}
         <section id="parts" className="mt-10 scroll-mt-32">
-          <SectionHead n="2" title="Components & budget" blurb="Street-price ranges. Buy the version-A row first, add the rest as you upgrade." />
+          <SectionHead n="2" title="Components & budget" blurb="Street-price ranges for the board and version you picked." />
+          {boardBar}
           <div className="overflow-x-auto rounded-xl border border-line dark:border-[#2f4234]">
             <table className="w-full min-w-[560px] text-sm">
               <thead>
@@ -251,7 +292,7 @@ function DetailView({ slug }: { slug: string }) {
                 </tr>
               </thead>
               <tbody className="bg-card dark:bg-moss">
-                {project.parts.map((p, i) => (
+                {view.parts.map((p, i) => (
                   <tr key={i} className="border-t border-linelight dark:border-[#24352a]">
                     <td className="px-4 py-2.5 font-medium text-ink dark:text-[#e4ece5]">{p.name}</td>
                     <td className="px-4 py-2.5 font-mono text-[13px] text-fog dark:text-[#9bb0a0]">{p.qty}</td>
@@ -267,9 +308,10 @@ function DetailView({ slug }: { slug: string }) {
         {/* 3 Wiring */}
         <section id="wiring" className="mt-10 scroll-mt-32">
           <SectionHead n="3" title="Wiring" blurb="Wire cold (power off), double-check 5V vs 3V3 rails, then power the board first." />
-          {project.wiring.length > 1 && (
-            <div className="print-hide mb-3 flex flex-wrap gap-2" role="tablist" aria-label="Wiring variants">
-              {project.wiring.map((w) => (
+          {boardBar}
+          {view.wiring.length > 1 && (
+            <div className="print-hide mb-3 flex flex-wrap gap-2" role="tablist" aria-label={`Wiring maps for ${boardName}`}>
+              {view.wiring.map((w) => (
                 <button
                   key={w.id}
                   type="button"
@@ -289,7 +331,7 @@ function DetailView({ slug }: { slug: string }) {
           )}
           <div className="print-hide">{wiring && <WiringDiagram board={wiring} />}</div>
           <div className="print-only">
-            {project.wiring.map((w) => (
+            {view.wiring.map((w) => (
               <div key={w.id} className="mb-4">
                 <h4 className="mb-2 font-bold">
                   {w.label} · {w.board}
@@ -303,7 +345,8 @@ function DetailView({ slug }: { slug: string }) {
         {/* 4 Steps */}
         <section id="steps" className="mt-10 scroll-mt-32">
           <SectionHead n="4" title="Build steps" blurb="In order. Tick each one as you finish — progress saves automatically." />
-          <StepsTracker slug={project.slug} steps={project.steps} />
+          {boardBar}
+          <StepsTracker slug={project.slug} steps={view.steps} version={sel.version} />
         </section>
 
         {/* 5 Simulator */}
@@ -314,8 +357,9 @@ function DetailView({ slug }: { slug: string }) {
 
         {/* 6 Code */}
         <section id="code" className="mt-10 scroll-mt-32">
-          <SectionHead n="6" title="Code" blurb="One sketch per version. Install the named libraries first, then paste and flash." />
-          <CodeBlock variants={project.code} />
+          <SectionHead n="6" title="Code" blurb="Sketches for the version you picked. Install the named libraries first, then paste and flash." />
+          {boardBar}
+          <CodeBlock key={`${sel.version}-${sel.board}`} variants={view.code} board={sel.board} />
         </section>
 
         {/* 7 Datasheets */}

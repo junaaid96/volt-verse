@@ -1,7 +1,7 @@
-import type { GuideRig, PartKind, SceneKind } from '../../data/types'
+import type { BoardKind, GuideRig, PartKind, SceneKind } from '../../data/types'
 import { BB } from './textures'
 
-export type { GuideRig, PartKind } from '../../data/types'
+export type { BoardKind, GuideRig, PartKind } from '../../data/types'
 
 /**
  * Pure data + math for the board viewer. Kept free of components so the
@@ -9,7 +9,6 @@ export type { GuideRig, PartKind } from '../../data/types'
  */
 
 export type V3 = [number, number, number]
-export type BoardKind = 'uno' | 'esp32' | 'nodemcu' | 'esp32cam'
 
 export interface BoardPort {
   pos: V3
@@ -21,15 +20,6 @@ export interface BoardDef {
   w: number
   h: number
   ports: BoardPort[]
-}
-
-/** Pick the viewer board from the project's primary controller. */
-export function boardFor(boards: string[]): BoardKind {
-  const b = (boards[0] ?? '').toLowerCase()
-  if (b.includes('cam')) return 'esp32cam'
-  if (b.includes('esp32')) return 'esp32'
-  if (b.includes('8266') || b.includes('nodemcu')) return 'nodemcu'
-  return 'uno'
 }
 
 export const UNO_DEF: BoardDef = {
@@ -70,6 +60,55 @@ export const CAM_DEF: BoardDef = {
     { pos: [-1.019, 0.4, 1.0], color: '#22252a', label: 'GND' },
     { pos: [0.251, 0.4, 1.0], color: '#e8a81c', label: 'IO4' },
   ],
+}
+
+// --- bench composition per board ----------------------------------------------
+
+export const BENCH_LAYOUTS: Record<BoardKind, { board: V3; bb: V3; sensor: V3 }> = {
+  uno: { board: [-3.9, 0, 0.2], bb: [3.9, 0, 0.3], sensor: [3.0, 0, 4.4] },
+  esp32: { board: [-3.3, 0, 0.2], bb: [3.6, 0, 0.3], sensor: [2.8, 0, 4.4] },
+  nodemcu: { board: [-3.2, 0, 0.2], bb: [3.6, 0, 0.3], sensor: [2.8, 0, 4.4] },
+  esp32cam: { board: [-3.0, 0, 0.2], bb: [3.6, 0, 0.3], sensor: [2.8, 0, 4.4] },
+}
+
+/** Labelled hotspots in board-local coords (offset by the board position at render). */
+export const BOARD_HOTSPOTS: Record<BoardKind, Array<{ at: V3; text: string }>> = {
+  uno: [
+    { at: [0.7, 0.75, 0.1], text: 'ATmega328P' },
+    { at: [-2.85, 0.95, -1.55], text: 'USB port' },
+    { at: [-2.7, 0.95, 1.55], text: 'Power jack' },
+    { at: [1.437, 1.05, -2.25], text: 'Digital pins' },
+    { at: [0.1, 1.05, 2.25], text: 'Analog pins' },
+  ],
+  esp32: [
+    { at: [-1.55, 0.5, 0], text: 'ESP32 · 3V3 logic' },
+    { at: [2.3, 0.4, 0], text: 'Micro-USB' },
+  ],
+  nodemcu: [
+    { at: [-1.4, 0.5, 0], text: 'ESP8266 · 3V3 logic' },
+    { at: [0.3, 0.8, -1.05], text: 'D0-D8 + A0' },
+    { at: [2.1, 0.4, 0], text: 'Micro-USB' },
+  ],
+  esp32cam: [
+    { at: [-1.2, 0.7, -0.4], text: 'OV2640 camera' },
+    { at: [0.2, 0.3, 0.5], text: 'Flash LED' },
+    { at: [-1.273, 0.4, 1.0], text: 'UART + 5V' },
+  ],
+}
+
+export interface CameraHome {
+  /** Viewing direction (camera position relative to target; only the direction matters). */
+  direction: V3
+  target: V3
+  /** Radius of the bench's bounding sphere; the camera distance is fitted to it per aspect ratio. */
+  radius: number
+}
+
+export const CAMERA_HOME: Record<BoardKind, CameraHome> = {
+  uno: { direction: [7.5, 7.2, 11.5], target: [0.4, 0.3, 2.0], radius: 6.2 },
+  esp32: { direction: [6.4, 6.4, 9.6], target: [0.4, 0.3, 2.0], radius: 5.5 },
+  nodemcu: { direction: [6.4, 6.4, 9.6], target: [0.4, 0.3, 2.0], radius: 5.5 },
+  esp32cam: { direction: [6.2, 6.2, 9.3], target: [0.4, 0.3, 2.0], radius: 5.2 },
 }
 
 // --- breadboard hole math (must match textures.ts) ---------------------------
