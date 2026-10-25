@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: "Iowan Old Style", Charter, Georgia, "Times New Roman", serif;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --color-ink: #182420;
+  --color-pine: #0d140f;
+  --color-moss: #16211a;
+  --color-paper: #f2f6f1;
+  --color-card: #ffffff;
+  --color-line: #d8e2d5;
+  --color-linelight: #e7eee5;
+  --color-fog: #55645a;
+  --color-leaf: #1e7a46;
+  --color-leafbright: #4fc46f;
+  --color-palegreen: #e2f0e5;
+  --color-amber: #b7791f;
+  --color-amberbright: #f0a63a;
+  --color-signal: #2470b7;
+  --color-mist: #9bb0a0;
+  --color-foam: #e4ece5;
+  --color-edge: #2f4234;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.dark body {
+  background: var(--color-pine);
+  color: #e4ece5;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+/* LCD readout used by simulators */
+.lcd {
+  background: #9bc23c;
+  color: #1d2a05;
+  font-family: var(--font-mono);
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 4px solid #3a4a1a;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  letter-spacing: 1px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.dark .lcd {
+  background: #8fb436;
+}
+
+/* Code blocks */
+.codeblock {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  tab-size: 2;
+}
+
+.codeblock::-webkit-scrollbar,
+.scrollthin::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.codeblock::-webkit-scrollbar-thumb,
+.scrollthin::-webkit-scrollbar-thumb {
+  background: #2f4234;
+  border-radius: 99px;
+}
+
+input[type="range"] {
+  accent-color: var(--color-leaf);
+}
+.dark input[type="range"] {
+  accent-color: var(--color-leafbright);
+}
+
+/* Dotted lab-grid backdrop for hero */
+.labgrid {
+  background-image: radial-gradient(circle, #b9c8b6 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.dark .labgrid {
+  background-image: radial-gradient(circle, #24352a 1px, transparent 1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.print-only {
+  display: none;
+}
+
+@media print {
+  @page {
+    margin: 13mm;
+  }
+  .print-hide {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  html {
+    scroll-behavior: auto;
+    color-scheme: light;
+  }
+  body {
+    background: #fff !important;
+    font-size: 12px;
+  }
+  /* Browsers don't print backgrounds: never rely on them, never clip. */
+  .overflow-x-auto,
+  .overflow-auto,
+  .scrollthin {
+    overflow: visible !important;
+  }
+  .codeblock {
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: none !important;
+    font-size: 10px;
+  }
+  pre {
+    break-inside: auto;
+  }
+  .lcd {
+    border-width: 2px;
+  }
+  li,
+  table,
+  svg {
+    break-inside: avoid;
+  }
+}

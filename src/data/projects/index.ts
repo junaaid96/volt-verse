@@ -1,0 +1,47 @@
+import type { Project } from '../types'
+import { smartAgriculture } from './smart-agriculture'
+import { weatherStation } from './iot-weather-station'
+import { waterLevel } from './smart-water-level'
+import { homeAutomation } from './home-automation'
+import { smartDoorLock } from './smart-door-lock'
+import { streetlight } from './smart-streetlight'
+import { healthMonitor } from './health-monitor'
+import { airQuality } from './air-quality-node'
+import { gasFireAlert } from './gas-fire-alert'
+import { smartParking } from './smart-parking'
+import { rfidAttendance } from './rfid-attendance'
+import { smartDustbin } from './smart-dustbin'
+import { energyMeter } from './smart-energy-meter'
+import { vehicleTracker } from './vehicle-tracker'
+import { esp32camSecurity } from './esp32cam-security'
+
+/**
+ * Project registry. To add a project: create its file under
+ * src/data/projects/, import it here, and push it into the array.
+ * Home, catalog, search and routing update automatically.
+ */
+export const projects: Project[] = [
+  smartAgriculture,
+  homeAutomation,
+  weatherStation,
+  healthMonitor,
+  smartDoorLock,
+  airQuality,
+  gasFireAlert,
+  energyMeter,
+  smartParking,
+  rfidAttendance,
+  smartDustbin,
+  vehicleTracker,
+  streetlight,
+  waterLevel,
+  esp32camSecurity,
+]
+
+export const getProject = (slug: string): Project | undefined =>
+  projects.find((p) => p.slug === slug)
+
+export const getProjectsByCategory = (categoryId: string): Project[] =>
+  projects.filter((p) => p.categoryId === categoryId)
+
+export const DIFFICULTY_ORDER = ['Basic', 'Medium', 'Advanced'] as const
