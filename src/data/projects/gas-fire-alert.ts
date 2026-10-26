@@ -80,7 +80,7 @@ export const gasFireAlert: Project = {
   scene: 'secure',
   updated: 'Oct 2026',
   sheets: ['esp32', 'arduino-uno', 'mq2', 'dht22', 'sim800l', 'tp4056', 'blynk-docs'],
-  rig: { sensor: 'mq', extras: ['buzzer'] },
+  rig: { sensor: 'flame', extras: ['mq', 'buzzer'] },
   options: [
     {
       id: 'a',
@@ -225,6 +225,7 @@ export const gasFireAlert: Project = {
     },
   ],
   simulator: {
+    viz: 'gauge',
     intro: 'Same rule as the firmware: gas above the limit — or flame detected — latches the alarm.',
     sliders: [
       { id: 'gas', label: 'Gas level', unit: '', min: 0, max: 1024, value: 220 },

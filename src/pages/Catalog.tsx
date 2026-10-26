@@ -10,6 +10,7 @@ import { ProjectCard } from '../components/ProjectCard'
 
 interface Filters {
   q: string
+  /** Stored but no longer read: the track filter is URL-driven (?track=), so plain /projects always shows all. */
   cat: string
   diff: 'all' | Difficulty
   sort: 'featured' | 'az' | 'difficulty'
@@ -26,14 +27,39 @@ export function Catalog() {
   const [filters, setFilters] = useLocalStorage<Filters>('vv-filters', DEFAULTS)
   // Saved view is URL-driven (?saved=1), so Guides/Saved nav never disagree.
   const savedOnly = params.get('saved') === '1'
+  // Track filter is URL-driven only (?track=robotics): home/footer track links
+  // land filtered, while plain /projects (Guides nav) always shows all tracks.
+  const trackParam = params.get('track')
+  const urlCat =
+    trackParam && categories.some((c) => c.status === 'live' && c.id === trackParam)
+      ? trackParam
+      : null
+  const activeCat = urlCat ?? 'all'
 
   const set = <K extends keyof Filters>(k: K, v: Filters[K]) =>
     setFilters((f) => ({ ...f, [k]: v }))
 
+  const setCat = (v: string) => {
+    setParams((prev) => {
+      const next = new URLSearchParams(prev)
+      if (v === 'all') next.delete('track')
+      else next.set('track', v)
+      return next
+    })
+  }
+
+  const toggleSaved = () =>
+    setParams((prev) => {
+      const next = new URLSearchParams(prev)
+      if (savedOnly) next.delete('saved')
+      else next.set('saved', '1')
+      return next
+    })
+
   const results = useMemo(() => {
     const q = filters.q.trim().toLowerCase()
     let list = [...projects]
-    if (filters.cat !== 'all') list = list.filter((p) => p.categoryId === filters.cat)
+    if (activeCat !== 'all') list = list.filter((p) => p.categoryId === activeCat)
     if (filters.diff !== 'all') list = list.filter((p) => p.difficulty === filters.diff)
     if (savedOnly) list = list.filter((p) => saved.includes(p.slug))
     if (q) {
@@ -54,20 +80,23 @@ export function Catalog() {
         list.sort((a, b) => Number(b.featured ?? false) - Number(a.featured ?? false))
     }
     return list
-  }, [filters, saved, savedOnly])
+  }, [filters, saved, savedOnly, activeCat])
 
   const liveCats = categories.filter((c) => c.status === 'live')
   const clearAll = () => {
     setFilters(DEFAULTS)
     setParams({})
   }
-  const isDefault = JSON.stringify(filters) === JSON.stringify(DEFAULTS) && !savedOnly
+  // `cat` is normalized out: older saved filters may hold a stale track value.
+  const isDefault =
+    JSON.stringify({ ...filters, cat: 'all' }) === JSON.stringify(DEFAULTS) && !savedOnly && !urlCat
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-8">
       <h1 className="font-display text-3xl font-bold text-ink dark:text-[#e4ece5]">Project guides</h1>
       <p className="mt-1 text-sm text-fog dark:text-[#9bb0a0]">
         {results.length} of {projects.length} guides
+        {activeCat !== 'all' ? ` · ${categories.find((c) => c.id === activeCat)?.name ?? activeCat}` : ''}
         {savedOnly ? ' · saved only' : ''}
       </p>
 
@@ -86,8 +115,8 @@ export function Catalog() {
           </label>
           <div className="flex flex-wrap items-center gap-2">
             <select
-              value={filters.cat}
-              onChange={(e) => set('cat', e.target.value)}
+              value={activeCat}
+              onChange={(e) => setCat(e.target.value)}
               className={selectCls}
               aria-label="Track"
             >
@@ -121,7 +150,7 @@ export function Catalog() {
             </select>
             <button
               type="button"
-              onClick={() => setParams(savedOnly ? {} : { saved: '1' })}
+              onClick={toggleSaved}
               aria-pressed={savedOnly}
               className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
                 savedOnly

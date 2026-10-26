@@ -104,6 +104,11 @@ button:not(:disabled) {
   white-space: nowrap;
   user-select: none;
 }
+/* Near the right edge the chip flips to extend left from its anchor dot. */
+.hotspot-flip {
+  flex-direction: row-reverse;
+  transform: translate(calc(-100% + 7px), -50%);
+}
 .hotspot-dot {
   position: relative;
   width: 14px;

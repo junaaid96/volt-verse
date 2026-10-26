@@ -1,6 +1,7 @@
 import { AlertTriangle } from 'lucide-react'
 import { TRACE_SECONDS, isChattering, ruleLevels, watchRange } from './engine'
 import { TraceChart } from './TraceChart'
+import { VizPanel } from './VizPanel'
 import { fmt, withUnit } from './format'
 import type { Simulation } from './useSimulation'
 
@@ -41,6 +42,8 @@ export function OutputPanel({ s }: { s: Simulation }) {
         {'\n'}
         {renderLcdLine(sim.lcd[1], s)}
       </div>
+
+      {sim.viz && <VizPanel s={s} />}
 
       <div className="mt-4 flex items-center justify-between text-sm">
         <span className="text-fog dark:text-mist">{sim.actuator}</span>

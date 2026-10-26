@@ -30,7 +30,9 @@ type Action =
 
 function initialModel(sim: SimConfig): Model {
   const settings: SimSettings = {
-    source: 'hold',
+    // Illustrated sims sweep on load so the live view moves at once;
+    // classic trace-only sims stay manual until the user picks a source.
+    source: sim.viz ? 'sweep' : 'hold',
     noise: 0,
     band: sim.band ?? 0,
     threshold: sim.threshold.value,

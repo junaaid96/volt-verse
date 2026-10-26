@@ -26,7 +26,7 @@ export const streetlight: Project = {
   scene: 'city',
   updated: 'Oct 2026',
   sheets: ['arduino-uno', 'esp32', 'esp8266', 'acs712', 'blynk-docs'],
-  rig: { sensor: 'pir', extras: ['relay'] },
+  rig: { sensor: 'pir', extras: ['lamp', 'solar'] },
   options: [
     {
       id: 'a',
@@ -201,6 +201,7 @@ export const streetlight: Project = {
     },
   ],
   simulator: {
+    viz: 'lamp',
     intro: 'Same rule as the firmware: darkness arms the lamp, motion boosts it from dim to full.',
     sliders: [
       { id: 'ambient', label: 'Ambient light', unit: 'lx', min: 0, max: 1000, value: 90 },

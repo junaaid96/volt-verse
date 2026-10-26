@@ -55,7 +55,7 @@ export const airQuality: Project = {
   scene: 'climate',
   updated: 'Oct 2026',
   sheets: ['esp32', 'esp8266', 'arduino-uno', 'pms5003', 'sx1278', 'dht22', 'tp4056', 'blynk-docs', 'thingspeak-docs'],
-  rig: { sensor: 'pms', extras: ['bme'] },
+  rig: { sensor: 'pms', extras: ['bme', 'mq'] },
   options: [
     {
       id: 'a',
@@ -211,6 +211,7 @@ export const airQuality: Project = {
     },
   ],
   simulator: {
+    viz: 'gauge',
     intro: 'Same rule as the firmware: PM2.5 above the limit pushes AQI to unhealthy and lights red.',
     sliders: [
       { id: 'pm', label: 'PM2.5', unit: 'µg/m³', min: 0, max: 300, value: 42 },

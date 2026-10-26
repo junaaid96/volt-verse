@@ -26,7 +26,7 @@ export const smartAgriculture: Project = {
   scene: 'field',
   updated: 'Oct 2026',
   sheets: ['esp8266', 'esp32', 'dht22', 'arduino-uno', 'thingspeak-docs'],
-  rig: { sensor: 'soil', extras: ['relay'] },
+  rig: { sensor: 'soil', extras: ['pump', 'lcd'] },
   featured: true,
   options: [
     {
@@ -239,6 +239,7 @@ export const smartAgriculture: Project = {
     },
   ],
   simulator: {
+    viz: 'gauge',
     intro: 'Test the same rule your code will use: if soil moisture drops below the threshold, the pump turns on.',
     sliders: [
       { id: 'soil', label: 'Soil moisture', unit: '%', min: 0, max: 100, value: 55 },

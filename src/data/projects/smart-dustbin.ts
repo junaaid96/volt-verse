@@ -29,7 +29,7 @@ export const smartDustbin: Project = {
   scene: 'city',
   updated: 'Oct 2026',
   sheets: ['arduino-uno', 'esp8266', 'esp32', 'hcsr04', 'blynk-docs'],
-  rig: { sensor: 'sonic', extras: ['sonic'] },
+  rig: { sensor: 'sonic', extras: ['sonic', 'servo'] },
   options: [
     {
       id: 'a',
@@ -183,6 +183,7 @@ export const smartDustbin: Project = {
     },
   ],
   simulator: {
+    viz: 'tank',
     intro: 'Same rule as the firmware: fill above the limit flags the bin FULL and alerts collection.',
     sliders: [
       { id: 'fill', label: 'Fill level', unit: '%', min: 0, max: 100, value: 62 },

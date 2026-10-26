@@ -138,6 +138,42 @@ export const datasheets: Record<string, Datasheet> = {
     url: 'https://firebase.google.com/docs/database',
     kind: 'Docs',
   },
+  'l298n': {
+    key: 'l298n',
+    label: 'L298N Motor Driver Guide (Random Nerd)',
+    url: 'https://randomnerdtutorials.com/esp8266-nodemcu-dc-motor-l298n-motor-driver-control-speed-direction/',
+    kind: 'Guide',
+  },
+  'sg90': {
+    key: 'sg90',
+    label: 'SG90 Servo Pinout + Datasheet (Components101)',
+    url: 'https://components101.com/motors/servo-motor-basics-pinout-datasheet',
+    kind: 'Guide',
+  },
+  'hc05': {
+    key: 'hc05',
+    label: 'HC-05 Bluetooth Module (Components101)',
+    url: 'https://components101.com/wireless/hc-05-bluetooth-module',
+    kind: 'Guide',
+  },
+  'mpu6050': {
+    key: 'mpu6050',
+    label: 'MPU6050 IMU Guide (Adafruit)',
+    url: 'https://learn.adafruit.com/mpu6050-6-dof-accelerometer-and-gyro',
+    kind: 'Guide',
+  },
+  'esp32servo': {
+    key: 'esp32servo',
+    label: 'ESP32Servo Library + Docs',
+    url: 'https://github.com/madhephaestus/ESP32Servo',
+    kind: 'Docs',
+  },
+  'espnow': {
+    key: 'espnow',
+    label: 'ESP-NOW Protocol Docs (Espressif)',
+    url: 'https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/network/esp_now.html',
+    kind: 'Docs',
+  },
 }
 
 export const getSheets = (keys?: string[]): Datasheet[] => {

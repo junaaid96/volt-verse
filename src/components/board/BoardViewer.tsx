@@ -24,7 +24,9 @@ import {
   UNO_DEF,
   arc,
   hole,
+  layoutRig,
   railHole,
+  rigFitBoost,
   type BoardDef,
   type BoardKind,
   type GuideRig,
@@ -88,17 +90,7 @@ type BenchPart = { kind: PartKind; pos: V3 }
 
 function useBenchParts(board: BoardKind, rig: GuideRig): BenchPart[] {
   const rigKey = JSON.stringify(rig)
-  return useMemo(() => {
-    const L = BENCH_LAYOUTS[board]
-    const r = JSON.parse(rigKey) as GuideRig
-    return [
-      ...(r.sensor ? [{ kind: r.sensor, pos: L.sensor }] : []),
-      ...(r.extras ?? []).map((kind, i) => ({
-        kind,
-        pos: [L.sensor[0] - 2.8 * (i + 1), 0, L.sensor[2] + 0.4] as V3,
-      })),
-    ]
-  }, [board, rigKey])
+  return useMemo(() => layoutRig(board, JSON.parse(rigKey) as GuideRig), [board, rigKey])
 }
 
 function useHotspots(board: BoardKind, parts: BenchPart[]): Array<{ at: V3; text: string }> {
@@ -182,12 +174,26 @@ export function BoardViewer({
   const [highQuality, setHighQuality] = useState(true)
   const [toggles, setToggles] = useState({ labels: true, flow: false, spin: !reduce })
 
-  const home = CAMERA_HOME[board]
+  // Widen the fit for oversized rigs (chassis, panels); memo keeps the
+  // camera fly-in from retriggering on unrelated renders.
+  const rigKey = JSON.stringify(rig)
+  const home = useMemo(() => {
+    const base = CAMERA_HOME[board]
+    const boost = rigFitBoost(JSON.parse(rigKey) as GuideRig)
+    return { ...base, radius: Math.min(base.radius + boost, 7.2) }
+  }, [board, rigKey])
   const stageTheme = STAGE_THEMES[theme === 'dark' ? 'dark' : 'light']
   const parts = useBenchParts(board, rig)
   const hotspots = useHotspots(board, parts)
   const hotspotPoints = useMemo(() => hotspots.map((h) => h.at), [hotspots])
   const hotspotEls = useRef<Array<HTMLElement | null>>([])
+  // Label priority for decluttering: rig parts first, then breadboard, then board pins.
+  const labelOrder = useMemo(() => {
+    const nb = BOARD_HOTSPOTS[board].length
+    const partIdx = Array.from({ length: parts.length }, (_, k) => nb + k)
+    const pinIdx = Array.from({ length: nb }, (_, i) => i)
+    return [...partIdx, nb + parts.length, ...pinIdx]
+  }, [board, parts])
 
   const onAction = useCallback(
     (a: DockAction) => {
@@ -220,7 +226,14 @@ export function BoardViewer({
         <Suspense fallback={null}>
           <Rig board={board} parts={parts} showFlow={toggles.flow} />
         </Suspense>
-        {toggles.labels && <HotspotProjector points={hotspotPoints} elements={hotspotEls} />}
+        {toggles.labels && (
+          <HotspotProjector
+            points={hotspotPoints}
+            labels={hotspots.map((h) => h.text)}
+            elements={hotspotEls}
+            order={labelOrder}
+          />
+        )}
         <CameraRig
           controlsRef={controls}
           lastInputRef={lastInput}

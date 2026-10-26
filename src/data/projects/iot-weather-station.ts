@@ -26,7 +26,7 @@ export const weatherStation: Project = {
   scene: 'climate',
   updated: 'Oct 2026',
   sheets: ['esp8266', 'esp32', 'arduino-uno', 'bme280', 'thingspeak-docs'],
-  rig: { sensor: 'bme', extras: ['oled'] },
+  rig: { sensor: 'bme', extras: ['rain', 'oled'] },
   featured: true,
   options: [
     {
@@ -194,6 +194,7 @@ export const weatherStation: Project = {
     },
   ],
   simulator: {
+    viz: 'gauge',
     intro: 'Same rule as the firmware: when rain intensity crosses the threshold, the station raises a RAIN alert.',
     sliders: [
       { id: 'rain', label: 'Rain intensity', unit: '%', min: 0, max: 100, value: 12 },

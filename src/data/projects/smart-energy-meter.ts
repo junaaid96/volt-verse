@@ -26,7 +26,7 @@ export const energyMeter: Project = {
   scene: 'energy',
   updated: 'Oct 2026',
   sheets: ['esp32', 'esp8266', 'arduino-uno', 'pzem-manual', 'blynk-docs'],
-  rig: { sensor: 'pzem', extras: ['relay'] },
+  rig: { sensor: 'pzem', extras: ['relay', 'lcd'] },
   options: [
     {
       id: 'a',
@@ -173,6 +173,7 @@ export const energyMeter: Project = {
     },
   ],
   simulator: {
+    viz: 'gauge',
     intro: 'Same rule as the firmware: current held above the trip setting for 5s opens the cut-off relay.',
     sliders: [
       { id: 'amps', label: 'Load current', unit: 'A', min: 0, max: 10, value: 3.2 },

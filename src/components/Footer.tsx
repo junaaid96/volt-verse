@@ -28,7 +28,10 @@ export function Footer() {
             {categories.map((c) => (
               <li key={c.id}>
                 {c.status === 'live' ? (
-                  <Link to="/projects" className="text-fog hover:text-leaf dark:text-[#9bb0a0] dark:hover:text-leafbright">
+                  <Link
+                    to={`/projects?track=${c.id}`}
+                    className="text-fog hover:text-leaf dark:text-[#9bb0a0] dark:hover:text-leafbright"
+                  >
                     {c.name} <span className="text-xs">(live)</span>
                   </Link>
                 ) : (

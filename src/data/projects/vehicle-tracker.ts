@@ -29,7 +29,7 @@ export const vehicleTracker: Project = {
   scene: 'city',
   updated: 'Oct 2026',
   sheets: ['esp32', 'esp8266', 'arduino-uno', 'neo6m', 'sim800l', 'tp4056', 'blynk-docs'],
-  rig: { sensor: 'gps', extras: ['gsm'] },
+  rig: { sensor: 'gps', extras: ['gsm', 'mpu'] },
   options: [
     {
       id: 'a',
@@ -188,6 +188,7 @@ export const vehicleTracker: Project = {
     },
   ],
   simulator: {
+    viz: 'gauge',
     intro: 'Same rule as the firmware: shock above the crash limit starts the SOS countdown.',
     sliders: [
       { id: 'shock', label: 'Impact force', unit: 'g', min: 0, max: 8, value: 1 },

@@ -29,7 +29,7 @@ export const smartDoorLock: Project = {
   scene: 'secure',
   updated: 'Oct 2026',
   sheets: ['esp32', 'arduino-uno', 'mfrc522', 'firebase-docs'],
-  rig: { sensor: 'rc522', extras: ['keypad'] },
+  rig: { sensor: 'rc522', extras: ['keypad', 'solenoid'] },
   options: [
     {
       id: 'a',
@@ -161,6 +161,7 @@ export const smartDoorLock: Project = {
     },
   ],
   simulator: {
+    viz: 'padlock',
     intro: 'Same rule as the firmware: too many wrong PIN tries inside the window triggers lockout.',
     sliders: [
       { id: 'fails', label: 'Failed tries', unit: '', min: 0, max: 8, value: 1 },

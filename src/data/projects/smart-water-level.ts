@@ -26,7 +26,7 @@ export const waterLevel: Project = {
   scene: 'water',
   updated: 'Oct 2026',
   sheets: ['arduino-uno', 'esp8266', 'esp32', 'hcsr04', 'blynk-docs'],
-  rig: { sensor: 'level', extras: ['relay'] },
+  rig: { sensor: 'sonic', extras: ['tank', 'lcd'] },
   options: [
     {
       id: 'a',
@@ -196,6 +196,7 @@ export const waterLevel: Project = {
     },
   ],
   simulator: {
+    viz: 'tank',
     intro: 'Same rule as the firmware: pump starts when the tank falls below the low mark and stops at the high mark.',
     sliders: [
       { id: 'level', label: 'Tank level', unit: '%', min: 0, max: 100, value: 42 },

@@ -2,19 +2,20 @@
 
 Live site: <https://volt-verse-ums.vercel.app>
 
-Hands-on IoT and electronics project guides for university students. Each guide
-covers one build end to end: versions to choose from, components with
-street-price ranges, wiring maps, ordered build steps, a logic simulator, and
-Arduino sketches — per board (Uno, ESP32, NodeMCU, ESP32-CAM).
+Hands-on IoT, robotics and electronics project guides for university students.
+Each guide covers one build end to end: versions to choose from, components
+with street-price ranges, wiring maps, ordered build steps, a logic simulator,
+and Arduino sketches — per board (Uno, ESP32, NodeMCU, ESP32-CAM).
 
 ## Features
 
-- 15 build guides (weather stations, health monitors, home automation, vehicle
-  tracking, access control, and more), each with Basic → Advanced versions
+- 27 build guides across IoT (15) and Robotics (12): weather stations, health
+  monitors, home automation, vehicle tracking, access control, line followers,
+  robot arms, sumo bots and more — each with Basic → Advanced versions
 - Per-board parts, wiring maps, and step text with board-specific details
-- 71 Arduino sketches, one per board/version, all compile-verified
-- Interactive 3D bench viewer, threshold-logic simulators, progress tracking,
-  bookmarks, dark mode, and print-to-PDF guides
+- 123 Arduino sketches, one per board/version, all compile-verified
+- Per-project 3D bench viewer, live-illustrated threshold-logic simulators,
+  progress tracking, bookmarks, dark mode, and print-to-PDF guides
 
 ## Getting started
 
@@ -54,7 +55,7 @@ sketch for — see the gap list before adding a new board to a guide.
 
 - `src/data/projects/` — guide content: parts, wiring, steps, simulator, code
 - `src/data/guideView.ts` — board/version selection and sketch pairing logic
-- `src/components/board/` — 3D bench viewer · `src/components/sim/` — simulator
+- `src/components/board/` — 3D bench viewer (32 part models) · `src/components/sim/` — simulator + live illustrations
 - `src/pages/` — Home, Catalog, ProjectDetail · `scripts/` — sketch tooling
 
 ## Contributing

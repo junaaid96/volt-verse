@@ -26,7 +26,7 @@ export const healthMonitor: Project = {
   scene: 'health',
   updated: 'Oct 2026',
   sheets: ['esp32', 'esp8266', 'arduino-uno', 'max30102', 'ds18b20', 'tp4056', 'thingspeak-docs'],
-  rig: { sensor: 'max', extras: ['oled'] },
+  rig: { sensor: 'max', extras: ['oled', 'buzzer'] },
   featured: true,
   options: [
     {
@@ -168,6 +168,7 @@ export const healthMonitor: Project = {
     },
   ],
   simulator: {
+    viz: 'gauge',
     intro: 'Same rule as the firmware: sustained abnormal vitals raise the alarm state.',
     sliders: [
       { id: 'bpm', label: 'Heart rate', unit: 'bpm', min: 40, max: 180, value: 78 },

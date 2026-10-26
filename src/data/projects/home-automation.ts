@@ -26,7 +26,7 @@ export const homeAutomation: Project = {
   scene: 'home',
   updated: 'Oct 2026',
   sheets: ['esp32', 'esp8266', 'arduino-uno', 'dht22', 'blynk-docs'],
-  rig: { sensor: 'pir', extras: ['relay'] },
+  rig: { sensor: 'pir', extras: ['relay', 'dht'] },
   featured: true,
   options: [
     {
@@ -190,6 +190,7 @@ export const homeAutomation: Project = {
     },
   ],
   simulator: {
+    viz: 'lamp',
     intro: 'Same rule as the firmware: motion plus darkness switches the room light on automatically.',
     sliders: [
       { id: 'motion', label: 'Motion level', unit: '%', min: 0, max: 100, value: 70 },

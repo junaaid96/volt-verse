@@ -87,7 +87,7 @@ export const smartParking: Project = {
   scene: 'city',
   updated: 'Oct 2026',
   sheets: ['esp32', 'esp8266', 'arduino-uno', 'firebase-docs'],
-  rig: { sensor: 'servo', extras: ['oled'] },
+  rig: { sensor: 'servo', extras: ['ir', 'oled'] },
   options: [
     {
       id: 'a',
@@ -232,6 +232,7 @@ export const smartParking: Project = {
     },
   ],
   simulator: {
+    viz: 'slots',
     intro: 'Same rule as the firmware: the entry gate opens only while free slots remain.',
     sliders: [
       { id: 'free', label: 'Free slots', unit: '', min: 0, max: 4, value: 3 },

@@ -9,7 +9,6 @@ import { HERO_BENCHES } from '../data/benches'
 import { ProjectCard } from '../components/ProjectCard'
 import { CategoryIcon } from '../components/CategoryIcon'
 import { Reveal } from '../components/Reveal'
-import { BenchSwitcher } from '../components/BenchSwitcher'
 
 const HeroScene = lazy(() => import('../components/HeroScene').then((m) => ({ default: m.HeroScene })))
 
@@ -38,6 +37,8 @@ export function Home() {
   const featured = projects.filter((p) => p.featured)
   const sketches = projects.reduce((n, p) => n + p.code.length, 0)
   const steps = projects.reduce((n, p) => n + p.steps.length, 0)
+  const liveTracks = categories.filter((c) => c.status === 'live').map((c) => c.name)
+  const tracksInline = liveTracks.join(' + ')
   const [bench, setBench] = useState(HERO_BENCHES[0])
 
   return (
@@ -52,7 +53,7 @@ export function Home() {
               className="inline-flex items-center gap-1.5 rounded-full border border-leaf/20 bg-palegreen px-3 py-1 text-xs font-semibold text-leaf dark:border-leafbright/20 dark:bg-moss dark:text-leafbright"
             >
               <FlaskConical className="h-3.5 w-3.5" />
-              University hardware lab · IoT track live
+              University hardware lab · {tracksInline} live
             </motion.span>
             <motion.h1
               variants={rise}
@@ -61,7 +62,7 @@ export function Home() {
               Build hardware that <span className="text-leaf dark:text-leafbright">actually works.</span>
             </motion.h1>
             <motion.p variants={rise} className="mt-5 max-w-md text-lg leading-relaxed text-fog dark:text-mist">
-              {projects.length} complete IoT builds with real wiring, ordered steps, a live logic simulator and
+              {projects.length} complete {tracksInline} builds with real wiring, ordered steps, a live logic simulator and
               copy-paste code.
             </motion.p>
             <motion.div variants={rise} className="mt-7 flex flex-wrap gap-3">
@@ -106,12 +107,24 @@ export function Home() {
           >
             <div className="overflow-hidden rounded-3xl border border-line bg-card shadow-[0_30px_60px_-30px_rgba(20,40,28,0.45)] dark:border-edge dark:bg-moss">
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-3 py-2.5 dark:border-edge">
-                <BenchSwitcher
-                  label="Choose a bench"
-                  options={HERO_BENCHES}
-                  active={bench.board}
-                  onSelect={(board) => setBench(HERO_BENCHES.find((b) => b.board === board) ?? HERO_BENCHES[0])}
-                />
+                <div role="group" aria-label="Choose a bench" className="flex flex-wrap items-center gap-1">
+                  {HERO_BENCHES.map((b) => (
+                    <button
+                      key={b.name}
+                      type="button"
+                      onClick={() => setBench(b)}
+                      aria-pressed={bench.name === b.name}
+                      title={`${b.name} — ${b.blurb}`}
+                      className={
+                        bench.name === b.name
+                          ? 'rounded-full bg-pine px-2.5 py-1 font-mono text-[11px] font-bold tracking-wide text-foam uppercase transition-colors dark:bg-foam dark:text-pine'
+                          : 'rounded-full bg-linelight px-2.5 py-1 font-mono text-[11px] font-bold tracking-wide text-fog uppercase transition-colors hover:bg-line hover:text-ink dark:bg-[#24352a] dark:text-mist dark:hover:bg-[#2f4234]'
+                      }
+                    >
+                      {b.short}
+                    </button>
+                  ))}
+                </div>
                 <span className="hidden items-center gap-1.5 pr-1 text-xs text-fog sm:inline-flex dark:text-mist">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-leafbright" aria-hidden="true" />
                   {bench.blurb}
@@ -163,7 +176,7 @@ export function Home() {
           <div>
             <h2 className="font-display text-3xl font-bold text-ink dark:text-foam">Start here</h2>
             <p className="mt-1 text-sm text-fog dark:text-[#9bb0a0]">
-              Four proven builds, ordered by how often students finish them on time.
+              Proven builds, ordered by how often students finish them on time.
             </p>
           </div>
           <Link to="/projects" className="hidden shrink-0 text-sm font-semibold text-leaf hover:underline sm:block dark:text-leafbright">
@@ -183,7 +196,8 @@ export function Home() {
       <section className="mx-auto max-w-7xl px-4 pt-12">
         <h2 className="font-display text-3xl font-bold text-ink dark:text-foam">Tracks</h2>
         <p className="mt-1 text-sm text-fog dark:text-[#9bb0a0]">
-          IoT is live today. The lab is structured so new tracks slot in without breaking anything.
+          {liveTracks.join(' and ')} {liveTracks.length > 1 ? 'are' : 'is'} live today. The lab is
+          structured so new tracks slot in without breaking anything.
         </p>
         <Reveal className="mt-5 overflow-hidden rounded-xl border border-line dark:border-[#2f4234]">
           {categories.map((c, i) => (
@@ -215,7 +229,7 @@ export function Home() {
               </div>
               {c.status === 'live' && (
                 <Link
-                  to="/projects"
+                  to={`/projects?track=${c.id}`}
                   className="hidden shrink-0 rounded-lg border border-line px-3.5 py-2 text-sm font-semibold text-ink transition-colors hover:border-leaf hover:text-leaf sm:block dark:border-[#2f4234] dark:text-[#e4ece5]"
                 >
                   Open →
@@ -230,7 +244,7 @@ export function Home() {
       <section id="how" className="mx-auto max-w-7xl scroll-mt-24 px-4 pt-12">
         <h2 className="font-display text-3xl font-bold text-ink dark:text-foam">How a guide works</h2>
         <p className="mt-1 text-sm text-fog dark:text-[#9bb0a0]">
-          Same seven sections in every build, so the fifteenth guide feels as familiar as the first.
+          Same seven sections in every build, so the newest guide feels as familiar as the first.
         </p>
         <ol className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {HOW.map(([title, detail], i) => (

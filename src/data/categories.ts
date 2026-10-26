@@ -21,10 +21,9 @@ export const categories: Category[] = [
     name: 'Robotics',
     tagline: 'Motion, control & autonomy',
     description:
-      'Line followers, robotic arms, obstacle avoiders and ROS starters. Track opens next.',
+      'Twelve complete builds on Arduino, ESP32 and ESP8266 — every one with versions, wiring, steps, a live logic simulator and copy-paste code.',
     icon: 'bot',
-    status: 'soon',
-    planned: 12,
+    status: 'live',
   },
   {
     id: 'embedded',

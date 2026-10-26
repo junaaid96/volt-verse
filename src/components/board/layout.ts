@@ -140,6 +140,42 @@ export function arc(a: V3, b: V3, lift = 1.1): V3[] {
   ]
 }
 
+/** Approximate ground footprint [width, depth] of each part module in cm. */
+export const PART_FOOTPRINTS: Record<PartKind, [number, number]> = {
+  soil: [3.0, 1.0],
+  pir: [1.7, 1.3],
+  bme: [0.95, 0.95],
+  max: [0.95, 0.95],
+  sonic: [4.5, 2.0],
+  relay: [1.6, 1.2],
+  level: [3.0, 1.2],
+  keypad: [2.6, 2.0],
+  rc522: [3.0, 4.5],
+  mq: [1.6, 2.2],
+  gps: [2.5, 2.5],
+  gsm: [2.5, 2.3],
+  pms: [3.5, 2.5],
+  pzem: [3.2, 2.0],
+  servo: [1.7, 2.6],
+  oled: [2.7, 1.4],
+  buzzer: [1.2, 1.2],
+  chassis: [8.0, 5.2],
+  l298n: [4.3, 4.3],
+  ir: [3.2, 1.4],
+  hc05: [2.8, 1.5],
+  mpu: [2.1, 1.6],
+  flame: [3.2, 1.4],
+  arm: [4.0, 3.5],
+  lcd: [7.0, 2.8],
+  dht: [1.6, 1.0],
+  rain: [5.4, 4.0],
+  solenoid: [3.0, 2.8],
+  solar: [7.0, 5.0],
+  pump: [3.8, 3.0],
+  lamp: [2.5, 2.0],
+  tank: [4.2, 4.2],
+}
+
 /** Wire-lead points on each part module (part-local coords). */
 export const SENSOR_LEADS: Record<PartKind, [V3, V3]> = {
   soil: [[1.2, 0.32, 0.12], [1.2, 0.32, -0.12]],
@@ -159,6 +195,21 @@ export const SENSOR_LEADS: Record<PartKind, [V3, V3]> = {
   servo: [[-0.15, 0.5, 1.15], [0.15, 0.5, 1.15]],
   oled: [[-0.8, 0.35, 0.5], [0.8, 0.35, 0.5]],
   buzzer: [[-0.2, 0.5, 0.4], [0.2, 0.5, 0.4]],
+  chassis: [[-1.5, 3.5, -2.0], [1.5, 3.5, -2.0]],
+  l298n: [[-1.6, 0.7, 1.8], [1.6, 0.7, 1.8]],
+  ir: [[-1.0, 0.35, -0.5], [1.0, 0.35, -0.5]],
+  hc05: [[-0.8, 0.3, -0.55], [0.8, 0.3, -0.55]],
+  mpu: [[-0.6, 0.3, -0.6], [0.6, 0.3, -0.6]],
+  flame: [[-1.0, 0.35, -0.5], [1.0, 0.35, -0.5]],
+  arm: [[-0.7, 0.45, -1.35], [0.7, 0.45, -1.35]],
+  lcd: [[-0.5, 0.4, -1.25], [0.5, 0.4, -1.25]],
+  dht: [[-0.4, 0.3, -0.35], [0.4, 0.3, -0.35]],
+  rain: [[-1.8, 0.25, -1.7], [1.8, 0.25, -1.7]],
+  solenoid: [[-0.6, 1.2, -1.2], [0.6, 1.2, -1.2]],
+  solar: [[-1.0, 1.0, -1.6], [1.0, 1.0, -1.6]],
+  pump: [[-0.8, 2.4, -0.8], [0.8, 2.4, -0.8]],
+  lamp: [[-0.9, 0.3, -0.3], [-0.3, 0.3, -0.3]],
+  tank: [[-1.5, 2.9, 0], [1.5, 2.9, 0]],
 }
 
 export const SENSOR_NAMES: Record<PartKind, string> = {
@@ -179,6 +230,65 @@ export const SENSOR_NAMES: Record<PartKind, string> = {
   servo: 'SG90 servo',
   oled: 'OLED display',
   buzzer: 'Buzzer',
+  chassis: '2WD robot chassis',
+  l298n: 'L298N motor driver',
+  ir: 'IR sensor module',
+  hc05: 'HC-05 Bluetooth',
+  mpu: 'MPU6050 IMU',
+  flame: 'Flame sensor',
+  arm: 'Robot arm',
+  lcd: '16×2 LCD',
+  dht: 'DHT22 sensor',
+  rain: 'Rain sensor',
+  solenoid: 'Solenoid lock',
+  solar: 'Solar panel',
+  pump: 'Mini water pump',
+  lamp: 'LED lamp',
+  tank: 'Water tank',
+}
+
+export interface PlacedPart {
+  kind: PartKind
+  pos: V3
+}
+
+// Breadboard front edge in world z (bench z 0.3 + half depth 2.75): parts sit beyond it.
+const BB_FRONT_Z = 3.05
+const PART_GAP = 0.8
+
+/**
+ * Lay a rig out on the bench: the primary part anchors at the board's sensor
+ * spot, extras march left with footprint-aware gaps, and deep parts slide
+ * forward (+z) so they never clip the breadboard.
+ */
+export function layoutRig(board: BoardKind, rig: GuideRig): PlacedPart[] {
+  const L = BENCH_LAYOUTS[board]
+  const kinds = [...(rig.sensor ? [rig.sensor] : []), ...(rig.extras ?? [])]
+  const out: PlacedPart[] = []
+  let x = L.sensor[0]
+  let prevW = 0
+  kinds.forEach((kind, i) => {
+    const [w, d] = PART_FOOTPRINTS[kind]
+    if (i > 0) x -= (prevW + w) / 2 + PART_GAP
+    const z = Math.max(L.sensor[2] + (i > 0 ? 0.4 : 0), BB_FRONT_Z + 0.3 + d / 2)
+    out.push({ kind, pos: [x, 0, z] })
+    prevW = w
+  })
+  return out
+}
+
+/**
+ * Extra fit-sphere radius for rigs with oversized parts, so a chassis or
+ * panel never crowds the default frame. Capped to keep small rigs unchanged.
+ */
+export function rigFitBoost(rig: GuideRig): number {
+  const kinds = [...(rig.sensor ? [rig.sensor] : []), ...(rig.extras ?? [])]
+  let boost = 0
+  for (const k of kinds) {
+    const [w, d] = PART_FOOTPRINTS[k]
+    boost = Math.max(boost, Math.max(0, w - 4.5) * 0.25 + Math.max(0, d - 3) * 0.2)
+  }
+  return Math.min(boost, 1.2)
 }
 
 const SCENE_DEFAULT: Record<SceneKind, PartKind> = {

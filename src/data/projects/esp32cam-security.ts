@@ -147,6 +147,7 @@ export const esp32camSecurity: Project = {
     },
   ],
   simulator: {
+    viz: 'lamp',
     intro: 'Same rule as the firmware: motion above sensitivity with cooldown expired snaps a photo.',
     sliders: [
       { id: 'motion', label: 'Motion level', unit: '%', min: 0, max: 100, value: 20 },

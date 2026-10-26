@@ -26,7 +26,7 @@ export const rfidAttendance: Project = {
   scene: 'secure',
   updated: 'Oct 2026',
   sheets: ['esp32', 'esp8266', 'arduino-uno', 'mfrc522', 'ds3231'],
-  rig: { sensor: 'rc522', extras: ['oled'] },
+  rig: { sensor: 'rc522', extras: ['oled', 'buzzer'] },
   options: [
     {
       id: 'a',
@@ -165,6 +165,7 @@ export const rfidAttendance: Project = {
     { id: 'demo-a-class', title: 'Demo a class', detail: '10 taps incl. 1 unknown card + 1 double-tap. Show the log (A) or live sheet rows + monthly % pivot (B).' },
   ],
   simulator: {
+    viz: 'lock',
     intro: 'Same rule as the firmware: taps after the late mark are flagged LATE in the register.',
     sliders: [
       { id: 'mins', label: 'Minutes after 9:00', unit: 'min', min: 0, max: 90, value: 8 },

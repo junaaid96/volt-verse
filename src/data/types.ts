@@ -29,6 +29,8 @@ export type SceneKind =
 export type PartKind =
   | 'soil' | 'pir' | 'bme' | 'max' | 'sonic' | 'relay' | 'level' | 'keypad'
   | 'rc522' | 'mq' | 'gps' | 'gsm' | 'pms' | 'pzem' | 'servo' | 'oled' | 'buzzer'
+  | 'chassis' | 'l298n' | 'ir' | 'hc05' | 'mpu' | 'flame' | 'arm'
+  | 'lcd' | 'dht' | 'rain' | 'solenoid' | 'solar' | 'pump' | 'lamp' | 'tank'
 
 /** Per-guide 3D composition: primary wired module + optional extras. */
 export interface GuideRig {
@@ -115,11 +117,21 @@ export interface SimThreshold {
 }
 
 /**
+ * Live illustration shown above the simulator output. Each kind draws an SVG
+ * driven by the running sim state (reading, actuator state, extra sliders).
+ */
+export type SimViz =
+  | 'rover' | 'line' | 'arm' | 'tank' | 'gauge' | 'lock' | 'lamp' | 'slots'
+  | 'padlock' | 'grip'
+
+/**
  * Generic threshold-rule simulator. Placeholders like {soil} in lcd lines
  * are replaced with live slider values; {act} becomes the actuator state.
  */
 export interface SimConfig {
   intro: string
+  /** Live illustration kind; omitted = classic trace-only output. */
+  viz?: SimViz
   sliders: SimSlider[]
   threshold: SimThreshold
   /** primary slider the rule watches */
