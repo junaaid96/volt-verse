@@ -141,33 +141,75 @@ export function Home() {
         </div>
       </section>
 
-      {/* New to Arduino */}
-      <section className="mx-auto max-w-7xl px-4 pt-8" aria-label="New to Arduino">
-        <div className="flex flex-col items-start justify-between gap-4 rounded-xl border border-line bg-card p-5 sm:flex-row sm:items-center dark:border-[#2f4234] dark:bg-moss">
-          <div className="flex items-start gap-3">
-            <span className="shrink-0 rounded-lg bg-palegreen p-2.5 text-leaf dark:bg-[#1f3626] dark:text-leafbright">
-              <GraduationCap className="h-5 w-5" />
-            </span>
-            <div>
-              <h2 className="font-display text-lg font-bold text-ink dark:text-[#e4ece5]">
-                New to Arduino? Warm up here first
-              </h2>
-              <p className="mt-0.5 max-w-2xl text-sm leading-relaxed text-fog dark:text-[#9bb0a0]">
-                Learn Arduino is a free beginner site where you wire LEDs, buttons, sensors, motors
-                and servos on a 3D Uno and watch the code run. Do a few lessons first — every guide
-                below assumes you can blink an LED. Made by Dilum Sanjaya.
-              </p>
-            </div>
+      {/* Warm-up path for beginners */}
+      <section className="mx-auto max-w-7xl px-4 pt-8" aria-label="Beginner warm-up path">
+        <div className="flex items-start gap-3">
+          <span className="shrink-0 rounded-lg bg-palegreen p-2.5 text-leaf dark:bg-[#1f3626] dark:text-leafbright">
+            <GraduationCap className="h-5 w-5" />
+          </span>
+          <div>
+            <h2 className="font-display text-2xl font-bold text-ink dark:text-[#e4ece5]">
+              New to hardware? Warm up first
+            </h2>
+            <p className="mt-0.5 max-w-3xl text-sm leading-relaxed text-fog dark:text-[#9bb0a0]">
+              Two free interactive sites where you wire circuits on a 3D board and watch the code
+              run. Follow them in order — every guide below assumes you can blink an LED and read
+              a sensor.
+            </p>
           </div>
+        </div>
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
           <a
             href="https://learn-arduino-red.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-leaf px-5 py-2.5 font-semibold text-white transition-colors hover:bg-[#186a3c]"
+            className="group rounded-xl border border-line bg-card p-5 transition-colors hover:border-leaf/60 dark:border-edge dark:bg-moss dark:hover:border-leafbright/50"
           >
-            Open Learn Arduino <ExternalLink className="h-4 w-4" />
+            <div className="flex items-center justify-between gap-2">
+              <span className="rounded-full bg-pine px-2.5 py-1 font-mono text-[11px] font-bold tracking-wide text-foam uppercase dark:bg-foam dark:text-pine">
+                Step 1 · Start here
+              </span>
+              <ExternalLink className="h-4 w-4 shrink-0 text-fog transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 dark:text-mist" />
+            </div>
+            <h3 className="font-display mt-3 text-2xl font-bold text-ink dark:text-foam">
+              Learn Arduino
+            </h3>
+            <p className="mt-1 text-sm leading-relaxed text-fog dark:text-mist">
+              LEDs, buttons, sensors, motors and servos on a 3D Uno, with guided lessons and a
+              built-in simulator. The fastest way to get ready for Uno-based guides.
+            </p>
+            <span className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-leaf px-4 py-2 text-sm font-semibold text-white transition-colors group-hover:bg-[#186a3c]">
+              Open Learn Arduino
+            </span>
+          </a>
+          <a
+            href="https://learn-esp32.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group rounded-xl border border-line bg-card p-5 transition-colors hover:border-signal/60 dark:border-edge dark:bg-moss dark:hover:border-signal/70"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span className="rounded-full bg-linelight px-2.5 py-1 font-mono text-[11px] font-bold tracking-wide text-fog uppercase dark:bg-[#24352a] dark:text-mist">
+                Step 2 · Go wireless
+              </span>
+              <ExternalLink className="h-4 w-4 shrink-0 text-fog transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 dark:text-mist" />
+            </div>
+            <h3 className="font-display mt-3 text-2xl font-bold text-ink dark:text-foam">
+              Learn ESP32
+            </h3>
+            <p className="mt-1 text-sm leading-relaxed text-fog dark:text-mist">
+              Wi-Fi, Bluetooth and bigger IoT builds on the ESP32, with pinout and schematic
+              reference. Do this after Arduino — or start here if your guide uses an ESP32 or
+              NodeMCU board.
+            </p>
+            <span className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-signal px-4 py-2 text-sm font-semibold text-white transition-colors group-hover:bg-[#1b5c92]">
+              Open Learn ESP32
+            </span>
           </a>
         </div>
+        <p className="mt-2.5 text-xs text-fog dark:text-mist">
+          Both sites are free and open in a new tab · Made by Dilum Sanjaya
+        </p>
       </section>
 
       {/* Featured */}
