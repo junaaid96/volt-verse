@@ -20,9 +20,9 @@ export const datasheets: Record<string, Datasheet> = {
   },
   'esp32cam': {
     key: 'esp32cam',
-    label: 'ESP32-CAM Docs (AI-Thinker)',
-    url: 'https://docs.ai-thinker.com/en/esp32cam',
-    kind: 'Docs',
+    label: 'ESP32-CAM Guide (Random Nerd)',
+    url: 'https://randomnerdtutorials.com/esp32-cam-video-streaming-face-recognition-arduino-ide/',
+    kind: 'Guide',
   },
   'arduino-uno': {
     key: 'arduino-uno',
@@ -50,8 +50,8 @@ export const datasheets: Record<string, Datasheet> = {
   },
   'mfrc522': {
     key: 'mfrc522',
-    label: 'MFRC522 Datasheet (NXP)',
-    url: 'https://www.nxp.com/docs/en/data-sheet/MFRC522.pdf',
+    label: 'MFRC522 Datasheet (NXP via Octopart)',
+    url: 'https://datasheet.octopart.com/MFRC52201HN1%2C151-NXP-Semiconductors-datasheet-15937754.pdf',
     kind: 'PDF',
   },
   'max30102': {
@@ -86,8 +86,8 @@ export const datasheets: Record<string, Datasheet> = {
   },
   'sim800l': {
     key: 'sim800l',
-    label: 'SIM800L Hardware Design (SIMCom)',
-    url: 'https://simcom.ee/documents/SIM800/SIM800L_Hardware%20Design_V1.00.pdf',
+    label: 'SIM800L Hardware Design V1.00 (SIMCom mirror)',
+    url: 'https://www.egloff.eu/images/arduino/SIM800L_Hardware_Design_V1.00.pdf',
     kind: 'PDF',
   },
   'acs712': {
@@ -201,7 +201,7 @@ export const datasheets: Record<string, Datasheet> = {
   'relay-5v': {
     key: 'relay-5v',
     label: '5V Relay Module Guide (LastMinuteEngineers)',
-    url: 'https://lastminuteengineers.com/one-channel-5v-relay-module-pinout/',
+    url: 'https://lastminuteengineers.com/one-channel-relay-module-arduino-tutorial/',
     kind: 'Guide',
   },
   'pir': {
@@ -212,20 +212,20 @@ export const datasheets: Record<string, Datasheet> = {
   },
   'tcrt5000': {
     key: 'tcrt5000',
-    label: 'TCRT5000 Line Sensor Guide (LastMinuteEngineers)',
-    url: 'https://lastminuteengineers.com/tcrt5000-ir-reflective-line-track-sensor-arduino/',
+    label: 'TCRT5000 Line Sensor Guide (Osoyoo)',
+    url: 'https://osoyoo.com/2017/07/25/tcrt5000-ir-track-sensor/',
     kind: 'Guide',
   },
   'ir-obstacle': {
     key: 'ir-obstacle',
-    label: 'IR Obstacle Sensor Guide (LastMinuteEngineers)',
-    url: 'https://lastminuteengineers.com/ir-sensor-arduino-tutorial/',
+    label: 'IR Obstacle Sensor Guide (ArduinoIntro)',
+    url: 'https://arduinointro.com/articles/projects/detecting-objects-using-the-infrared-ir-obstacle-sensor',
     kind: 'Guide',
   },
   'esp-01': {
     key: 'esp-01',
-    label: 'ESP-01 Wi-Fi Module Guide (LastMinuteEngineers)',
-    url: 'https://lastminuteengineers.com/esp01-wifi-module-arduino/',
+    label: 'ESP8266 Wi-Fi Module Guide (ElectroPeak)',
+    url: 'https://electropeak.com/learn/using-esp8266-wifi-module-arduino-ide-full-guide/',
     kind: 'Guide',
   },
   'level-shifter': {
@@ -236,15 +236,15 @@ export const datasheets: Record<string, Datasheet> = {
   },
   'flame-sensor': {
     key: 'flame-sensor',
-    label: 'Flame Sensor Guide (LastMinuteEngineers)',
-    url: 'https://lastminuteengineers.com/flame-sensor-arduino-tutorial/',
+    label: 'Flame Sensor Guide (CircuitDigest)',
+    url: 'https://circuitdigest.com/microcontroller-projects/interfacing-flame-sensor-with-arduino',
     kind: 'Guide',
   },
   'mq135': {
     key: 'mq135',
-    label: 'MQ-135 Gas Sensor Guide (LastMinuteEngineers)',
-    url: 'https://lastminuteengineers.com/mq135-gas-sensor-arduino-tutorial/',
-    kind: 'Guide',
+    label: 'MQ135 Library + Docs (GeorgK)',
+    url: 'https://github.com/GeorgK/MQ135',
+    kind: 'Docs',
   },
   'soil-capacitive': {
     key: 'soil-capacitive',
@@ -255,7 +255,7 @@ export const datasheets: Record<string, Datasheet> = {
   'keypad-4x4': {
     key: 'keypad-4x4',
     label: '4x4 Keypad Guide (LastMinuteEngineers)',
-    url: 'https://lastminuteengineers.com/4x4-keypad-arduino-tutorial/',
+    url: 'https://lastminuteengineers.com/arduino-keypad-tutorial/',
     kind: 'Guide',
   },
   'rain-sensor': {
@@ -272,9 +272,9 @@ export const datasheets: Record<string, Datasheet> = {
   },
   'lm2596': {
     key: 'lm2596',
-    label: 'LM2596 Buck Converter Guide (LastMinuteEngineers)',
-    url: 'https://lastminuteengineers.com/lm2596-dc-dc-buck-converter-module-arduino/',
-    kind: 'Guide',
+    label: 'LM2596 Datasheet (TI)',
+    url: 'https://www.ti.com/lit/ds/symlink/lm2596.pdf',
+    kind: 'PDF',
   },
 }
 

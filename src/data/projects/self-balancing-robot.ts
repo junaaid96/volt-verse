@@ -25,7 +25,7 @@ export const selfBalancingRobot: Project = {
   skills: ['PID control', 'IMU sensor fusion', 'Motor driving', 'Bluetooth trim'],
   scene: 'city',
   updated: 'Oct 2026',
-  sheets: ['arduino-uno', 'esp32', 'mpu6050', 'l298n'],
+  sheets: ['arduino-uno', 'esp32', 'mpu6050', 'l298n', 'hc05'],
   rig: { sensor: 'chassis', extras: ['mpu', 'l298n'] },
   options: [
     {
