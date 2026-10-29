@@ -25,7 +25,7 @@ export const lineFollowerRobot: Project = {
   skills: ['Motor driving', 'IR sensing', 'Bang-bang control', 'Track tuning'],
   scene: 'city',
   updated: 'Oct 2026',
-  sheets: ['arduino-uno', 'esp32', 'l298n'],
+  sheets: ['arduino-uno', 'esp32', 'l298n', 'tcrt5000'],
   rig: { sensor: 'chassis', extras: ['l298n', 'ir'] },
   featured: true,
   options: [

@@ -54,7 +54,7 @@ export const airQuality: Project = {
   skills: ['PM sensing', 'AQI math', 'LoRa option', 'Dashboards'],
   scene: 'climate',
   updated: 'Oct 2026',
-  sheets: ['esp32', 'esp8266', 'arduino-uno', 'pms5003', 'sx1278', 'dht22', 'tp4056', 'blynk-docs', 'thingspeak-docs'],
+  sheets: ['esp32', 'esp8266', 'arduino-uno', 'pms5003', 'sx1278', 'dht22', 'mq135', 'ssd1306', 'esp-01', 'tp4056', 'blynk-docs', 'thingspeak-docs'],
   rig: { sensor: 'pms', extras: ['bme', 'mq'] },
   options: [
     {

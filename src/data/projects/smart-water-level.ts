@@ -25,7 +25,7 @@ export const waterLevel: Project = {
   skills: ['Ultrasonic sensing', 'Relay control', 'Safety interlocks', 'Blynk'],
   scene: 'water',
   updated: 'Oct 2026',
-  sheets: ['arduino-uno', 'esp8266', 'esp32', 'hcsr04', 'blynk-docs'],
+  sheets: ['arduino-uno', 'esp8266', 'esp32', 'hcsr04', 'lcd16x2', 'relay-5v', 'level-shifter', 'esp-01', 'blynk-docs'],
   rig: { sensor: 'sonic', extras: ['tank', 'lcd'] },
   options: [
     {

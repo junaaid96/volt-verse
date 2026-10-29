@@ -25,7 +25,7 @@ export const mazeSolverRobot: Project = {
   skills: ['Wall following', 'Sensor fusion', 'OLED display', 'Maze strategy'],
   scene: 'city',
   updated: 'Oct 2026',
-  sheets: ['arduino-uno', 'esp32', 'hcsr04', 'l298n'],
+  sheets: ['arduino-uno', 'esp32', 'hcsr04', 'l298n', 'tcrt5000', 'ssd1306'],
   rig: { sensor: 'chassis', extras: ['sonic', 'ir'] },
   options: [
     {

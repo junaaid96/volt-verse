@@ -25,7 +25,7 @@ export const energyMeter: Project = {
   skills: ['AC metering', 'PZEM-004T', 'Tariff math', 'Overload cut-off'],
   scene: 'energy',
   updated: 'Oct 2026',
-  sheets: ['esp32', 'esp8266', 'arduino-uno', 'pzem-manual', 'blynk-docs'],
+  sheets: ['esp32', 'esp8266', 'arduino-uno', 'pzem-manual', 'ssd1306', 'lcd16x2', 'relay-5v', 'blynk-docs'],
   rig: { sensor: 'pzem', extras: ['relay', 'lcd'] },
   options: [
     {

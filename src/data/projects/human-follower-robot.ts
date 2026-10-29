@@ -25,7 +25,7 @@ export const humanFollowerRobot: Project = {
   skills: ['PIR motion sensing', 'Ultrasonic ranging', 'Follow control', 'Lost-target search'],
   scene: 'home',
   updated: 'Oct 2026',
-  sheets: ['arduino-uno', 'esp32', 'hcsr04', 'l298n'],
+  sheets: ['arduino-uno', 'esp32', 'hcsr04', 'l298n', 'pir', 'tcrt5000'],
   rig: { sensor: 'chassis', extras: ['pir', 'sonic'] },
   options: [
     {

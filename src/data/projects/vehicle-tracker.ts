@@ -28,7 +28,7 @@ export const vehicleTracker: Project = {
   skills: ['GPS parsing', 'GSM/SMS', 'MPU6050 shock', 'Maps links'],
   scene: 'city',
   updated: 'Oct 2026',
-  sheets: ['esp32', 'esp8266', 'arduino-uno', 'neo6m', 'sim800l', 'tp4056', 'blynk-docs'],
+  sheets: ['esp32', 'esp8266', 'arduino-uno', 'neo6m', 'mpu6050', 'sim800l', 'lm2596', 'tp4056', 'blynk-docs'],
   rig: { sensor: 'gps', extras: ['gsm', 'mpu'] },
   options: [
     {

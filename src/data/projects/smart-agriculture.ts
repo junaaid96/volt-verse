@@ -25,7 +25,7 @@ export const smartAgriculture: Project = {
   skills: ['Analog sensing', 'Relay control', 'LCD display', 'ThingSpeak'],
   scene: 'field',
   updated: 'Oct 2026',
-  sheets: ['esp8266', 'esp32', 'dht22', 'arduino-uno', 'thingspeak-docs'],
+  sheets: ['esp8266', 'esp32', 'dht22', 'arduino-uno', 'soil-capacitive', 'relay-5v', 'lcd16x2', 'level-shifter', 'esp-01', 'thingspeak-docs'],
   rig: { sensor: 'soil', extras: ['pump', 'lcd'] },
   featured: true,
   options: [

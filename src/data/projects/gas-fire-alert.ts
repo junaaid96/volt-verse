@@ -79,7 +79,7 @@ export const gasFireAlert: Project = {
   skills: ['MQ sensing', 'Flame IR', 'GSM/SMS', 'Safety relays'],
   scene: 'secure',
   updated: 'Oct 2026',
-  sheets: ['esp32', 'arduino-uno', 'mq2', 'dht22', 'sim800l', 'tp4056', 'blynk-docs'],
+  sheets: ['esp32', 'arduino-uno', 'mq2', 'dht22', 'flame-sensor', 'relay-5v', 'sg90', 'esp-01', 'sim800l', 'tp4056', 'blynk-docs'],
   rig: { sensor: 'flame', extras: ['mq', 'buzzer'] },
   options: [
     {

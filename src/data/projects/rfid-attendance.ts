@@ -25,7 +25,7 @@ export const rfidAttendance: Project = {
   skills: ['RFID auth', 'NTP time', 'Google Sheets', 'LCD UI'],
   scene: 'secure',
   updated: 'Oct 2026',
-  sheets: ['esp32', 'esp8266', 'arduino-uno', 'mfrc522', 'ds3231'],
+  sheets: ['esp32', 'esp8266', 'arduino-uno', 'mfrc522', 'ds3231', 'ssd1306', 'lcd16x2', 'level-shifter', 'microsd', 'esp-01', 'apps-script'],
   rig: { sensor: 'rc522', extras: ['oled', 'buzzer'] },
   options: [
     {

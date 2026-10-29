@@ -25,7 +25,7 @@ export const pickAndPlaceRover: Project = {
   skills: ['Line following', 'Servo arms', 'Sensor triggering', 'Pick sequencing'],
   scene: 'city',
   updated: 'Oct 2026',
-  sheets: ['arduino-uno', 'esp32', 'hcsr04', 'l298n', 'sg90', 'esp32servo'],
+  sheets: ['arduino-uno', 'esp32', 'hcsr04', 'l298n', 'sg90', 'esp32servo', 'tcrt5000'],
   rig: { sensor: 'chassis', extras: ['arm', 'sonic'] },
   options: [
     {

@@ -5,7 +5,7 @@ import { datasheets } from '../data/datasheets'
 import { Logo } from './Navbar'
 
 export function Footer() {
-  const docs = ['blynk-docs', 'thingspeak-docs', 'firebase-docs', 'arduino-uno']
+  const docs = ['blynk-docs', 'thingspeak-docs', 'firebase-docs', 'telegram-docs', 'arduino-uno']
     .map((k) => datasheets[k])
     .filter(Boolean)
 

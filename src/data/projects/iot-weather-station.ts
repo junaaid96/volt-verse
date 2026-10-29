@@ -25,7 +25,7 @@ export const weatherStation: Project = {
   skills: ['BME280 sensing', 'Rain gauge', 'ThingSpeak', 'OLED display'],
   scene: 'climate',
   updated: 'Oct 2026',
-  sheets: ['esp8266', 'esp32', 'arduino-uno', 'bme280', 'thingspeak-docs'],
+  sheets: ['esp8266', 'esp32', 'arduino-uno', 'bme280', 'ssd1306', 'rain-sensor', 'level-shifter', 'esp-01', 'thingspeak-docs'],
   rig: { sensor: 'bme', extras: ['rain', 'oled'] },
   featured: true,
   options: [

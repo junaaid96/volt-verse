@@ -25,7 +25,7 @@ export const streetlight: Project = {
   skills: ['LDR sensing', 'PIR sensing', 'PWM dimming', 'Fault detection'],
   scene: 'city',
   updated: 'Oct 2026',
-  sheets: ['arduino-uno', 'esp32', 'esp8266', 'acs712', 'blynk-docs'],
+  sheets: ['arduino-uno', 'esp32', 'esp8266', 'acs712', 'pir', 'lm2596', 'esp-01', 'blynk-docs'],
   rig: { sensor: 'pir', extras: ['lamp', 'solar'] },
   options: [
     {

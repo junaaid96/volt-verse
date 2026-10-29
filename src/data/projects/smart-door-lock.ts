@@ -28,7 +28,7 @@ export const smartDoorLock: Project = {
   skills: ['RFID auth', 'Keypad/PIN', 'Firebase', 'Solenoid control'],
   scene: 'secure',
   updated: 'Oct 2026',
-  sheets: ['esp32', 'arduino-uno', 'mfrc522', 'firebase-docs'],
+  sheets: ['esp32', 'arduino-uno', 'mfrc522', 'keypad-4x4', 'ssd1306', 'level-shifter', 'esp-01', 'firebase-docs'],
   rig: { sensor: 'rc522', extras: ['keypad', 'solenoid'] },
   options: [
     {

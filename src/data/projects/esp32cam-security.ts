@@ -47,7 +47,7 @@ export const esp32camSecurity: Project = {
   skills: ['OV2640 camera', 'PIR trigger', 'Telegram API', 'MJPEG stream'],
   scene: 'secure',
   updated: 'Oct 2026',
-  sheets: ['esp32cam', 'esp32'],
+  sheets: ['esp32cam', 'esp32', 'pir', 'microsd', 'telegram-docs'],
   rig: { sensor: null, extras: ['pir'] },
   options: [
     {

@@ -174,6 +174,108 @@ export const datasheets: Record<string, Datasheet> = {
     url: 'https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/network/esp_now.html',
     kind: 'Docs',
   },
+  'telegram-docs': {
+    key: 'telegram-docs',
+    label: 'Telegram Bot API',
+    url: 'https://core.telegram.org/bots/api',
+    kind: 'Docs',
+  },
+  'apps-script': {
+    key: 'apps-script',
+    label: 'Apps Script Web Apps (Google)',
+    url: 'https://developers.google.com/apps-script',
+    kind: 'Docs',
+  },
+  'ssd1306': {
+    key: 'ssd1306',
+    label: 'SSD1306 OLED Guide (Adafruit)',
+    url: 'https://learn.adafruit.com/monochrome-oled-breakouts',
+    kind: 'Guide',
+  },
+  'lcd16x2': {
+    key: 'lcd16x2',
+    label: '16x2 I2C LCD Guide (LastMinuteEngineers)',
+    url: 'https://lastminuteengineers.com/i2c-lcd-arduino-tutorial/',
+    kind: 'Guide',
+  },
+  'relay-5v': {
+    key: 'relay-5v',
+    label: '5V Relay Module Guide (LastMinuteEngineers)',
+    url: 'https://lastminuteengineers.com/one-channel-5v-relay-module-pinout/',
+    kind: 'Guide',
+  },
+  'pir': {
+    key: 'pir',
+    label: 'HC-SR501 PIR Guide (LastMinuteEngineers)',
+    url: 'https://lastminuteengineers.com/pir-sensor-arduino-tutorial/',
+    kind: 'Guide',
+  },
+  'tcrt5000': {
+    key: 'tcrt5000',
+    label: 'TCRT5000 Line Sensor Guide (LastMinuteEngineers)',
+    url: 'https://lastminuteengineers.com/tcrt5000-ir-reflective-line-track-sensor-arduino/',
+    kind: 'Guide',
+  },
+  'ir-obstacle': {
+    key: 'ir-obstacle',
+    label: 'IR Obstacle Sensor Guide (LastMinuteEngineers)',
+    url: 'https://lastminuteengineers.com/ir-sensor-arduino-tutorial/',
+    kind: 'Guide',
+  },
+  'esp-01': {
+    key: 'esp-01',
+    label: 'ESP-01 Wi-Fi Module Guide (LastMinuteEngineers)',
+    url: 'https://lastminuteengineers.com/esp01-wifi-module-arduino/',
+    kind: 'Guide',
+  },
+  'level-shifter': {
+    key: 'level-shifter',
+    label: 'Logic Level Shifter Guide (SparkFun)',
+    url: 'https://learn.sparkfun.com/tutorials/bi-directional-logic-level-converter-hookup-guide',
+    kind: 'Guide',
+  },
+  'flame-sensor': {
+    key: 'flame-sensor',
+    label: 'Flame Sensor Guide (LastMinuteEngineers)',
+    url: 'https://lastminuteengineers.com/flame-sensor-arduino-tutorial/',
+    kind: 'Guide',
+  },
+  'mq135': {
+    key: 'mq135',
+    label: 'MQ-135 Gas Sensor Guide (LastMinuteEngineers)',
+    url: 'https://lastminuteengineers.com/mq135-gas-sensor-arduino-tutorial/',
+    kind: 'Guide',
+  },
+  'soil-capacitive': {
+    key: 'soil-capacitive',
+    label: 'Capacitive Soil Sensor Guide (LastMinuteEngineers)',
+    url: 'https://lastminuteengineers.com/capacitive-soil-moisture-sensor-arduino/',
+    kind: 'Guide',
+  },
+  'keypad-4x4': {
+    key: 'keypad-4x4',
+    label: '4x4 Keypad Guide (LastMinuteEngineers)',
+    url: 'https://lastminuteengineers.com/4x4-keypad-arduino-tutorial/',
+    kind: 'Guide',
+  },
+  'rain-sensor': {
+    key: 'rain-sensor',
+    label: 'Rain Sensor Guide (LastMinuteEngineers)',
+    url: 'https://lastminuteengineers.com/rain-sensor-arduino-tutorial/',
+    kind: 'Guide',
+  },
+  'microsd': {
+    key: 'microsd',
+    label: 'MicroSD Card Module Guide (LastMinuteEngineers)',
+    url: 'https://lastminuteengineers.com/arduino-micro-sd-card-module-tutorial/',
+    kind: 'Guide',
+  },
+  'lm2596': {
+    key: 'lm2596',
+    label: 'LM2596 Buck Converter Guide (LastMinuteEngineers)',
+    url: 'https://lastminuteengineers.com/lm2596-dc-dc-buck-converter-module-arduino/',
+    kind: 'Guide',
+  },
 }
 
 export const getSheets = (keys?: string[]): Datasheet[] => {

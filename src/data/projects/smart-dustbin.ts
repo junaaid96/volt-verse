@@ -28,7 +28,7 @@ export const smartDustbin: Project = {
   skills: ['Ultrasonic sensing', 'Servo control', 'Blynk', 'Route logic'],
   scene: 'city',
   updated: 'Oct 2026',
-  sheets: ['arduino-uno', 'esp8266', 'esp32', 'hcsr04', 'blynk-docs'],
+  sheets: ['arduino-uno', 'esp8266', 'esp32', 'hcsr04', 'sg90', 'mq135', 'esp-01', 'blynk-docs'],
   rig: { sensor: 'sonic', extras: ['sonic', 'servo'] },
   options: [
     {

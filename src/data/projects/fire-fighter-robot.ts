@@ -25,7 +25,7 @@ export const fireFighterRobot: Project = {
   skills: ['Flame sensing', 'Relay switching', 'Seek steering', 'Pump control'],
   scene: 'home',
   updated: 'Oct 2026',
-  sheets: ['arduino-uno', 'esp32', 'l298n'],
+  sheets: ['arduino-uno', 'esp32', 'l298n', 'flame-sensor', 'relay-5v'],
   rig: { sensor: 'chassis', extras: ['flame', 'pump'] },
   options: [
     {

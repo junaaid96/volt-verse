@@ -86,7 +86,7 @@ export const smartParking: Project = {
   skills: ['IR sensor arrays', 'Servo gates', 'Firebase', 'Web map'],
   scene: 'city',
   updated: 'Oct 2026',
-  sheets: ['esp32', 'esp8266', 'arduino-uno', 'firebase-docs'],
+  sheets: ['esp32', 'esp8266', 'arduino-uno', 'ssd1306', 'ir-obstacle', 'sg90', 'esp-01', 'firebase-docs'],
   rig: { sensor: 'servo', extras: ['ir', 'oled'] },
   options: [
     {

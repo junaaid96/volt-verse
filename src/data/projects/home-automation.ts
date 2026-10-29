@@ -25,7 +25,7 @@ export const homeAutomation: Project = {
   skills: ['Relay control', 'Blynk', 'Voice assist', 'Manual override'],
   scene: 'home',
   updated: 'Oct 2026',
-  sheets: ['esp32', 'esp8266', 'arduino-uno', 'dht22', 'blynk-docs'],
+  sheets: ['esp32', 'esp8266', 'arduino-uno', 'dht22', 'relay-5v', 'pir', 'esp-01', 'blynk-docs'],
   rig: { sensor: 'pir', extras: ['relay', 'dht'] },
   featured: true,
   options: [

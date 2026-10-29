@@ -25,7 +25,7 @@ export const healthMonitor: Project = {
   skills: ['MAX30102 sensing', 'Signal filtering', 'ThingSpeak', 'Alert logic'],
   scene: 'health',
   updated: 'Oct 2026',
-  sheets: ['esp32', 'esp8266', 'arduino-uno', 'max30102', 'ds18b20', 'tp4056', 'thingspeak-docs'],
+  sheets: ['esp32', 'esp8266', 'arduino-uno', 'max30102', 'ds18b20', 'ssd1306', 'level-shifter', 'esp-01', 'tp4056', 'thingspeak-docs'],
   rig: { sensor: 'max', extras: ['oled', 'buzzer'] },
   featured: true,
   options: [

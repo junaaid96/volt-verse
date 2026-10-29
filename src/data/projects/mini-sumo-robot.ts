@@ -25,7 +25,7 @@ export const miniSumoRobot: Project = {
   skills: ['Opponent sensing', 'Edge detection', 'Bout state machines', 'Match strategy'],
   scene: 'city',
   updated: 'Oct 2026',
-  sheets: ['arduino-uno', 'esp32', 'hcsr04', 'l298n'],
+  sheets: ['arduino-uno', 'esp32', 'hcsr04', 'l298n', 'tcrt5000', 'ir-obstacle'],
   rig: { sensor: 'sonic', extras: ['chassis', 'ir'] },
   options: [
     {
