@@ -4,7 +4,7 @@ import { BOARD_NAMES } from '../data/guideView'
 import { BenchSwitcher, type BenchOption } from './BenchSwitcher'
 
 const selectCls =
-  'rounded-lg border border-line bg-card py-1.5 pl-2.5 pr-7 text-sm font-medium text-ink dark:border-[#2f4234] dark:bg-moss dark:text-[#e4ece5]'
+  'rounded-lg border border-line bg-card py-1.5 pl-2.5 pr-7 text-sm font-medium text-ink dark:border-edge dark:bg-moss dark:text-foam'
 
 /** Compact board + version pickers for the sticky guide nav. Only boards that can run the guide are offered. */
 export function BuildSelector({
@@ -56,7 +56,7 @@ export function BuildSelector({
 export function NotSuitableList({ items }: { items: Array<{ board: BoardKind; reason: string }> }) {
   if (items.length === 0) return null
   return (
-    <div className="rounded-xl border border-line bg-card p-3 text-sm dark:border-[#2f4234] dark:bg-moss">
+    <div className="rounded-xl border border-line bg-card p-3 text-sm dark:border-edge dark:bg-moss">
       <p className="flex items-center gap-1.5 font-semibold text-ink dark:text-foam">
         <Ban className="h-4 w-4 text-amber dark:text-amberbright" aria-hidden="true" />
         Not suitable for this build
@@ -85,7 +85,7 @@ export function SectionBoardBar({
   option: BuildOption
 }) {
   return (
-    <div className="print-hide mb-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-line bg-card px-2 py-1.5 dark:border-[#2f4234] dark:bg-moss">
+    <div className="print-hide mb-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-line bg-card px-2 py-1.5 dark:border-edge dark:bg-moss">
       <BenchSwitcher options={options} active={board} onSelect={onBoard} label="Board for this section" />
       <span className="px-1 text-xs text-fog dark:text-mist">
         Version: <strong className="font-semibold text-ink dark:text-foam">{option.title}</strong>

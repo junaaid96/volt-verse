@@ -55,7 +55,7 @@ function TraceChartView({ trace, range, trip, release, now, label }: TraceChartP
         />
       ))}
       {[0.25, 0.5, 0.75].map((f) => (
-        <line key={f} x1={0} x2={W} y1={PAD_Y + f * (H - PAD_Y * 2)} y2={PAD_Y + f * (H - PAD_Y * 2)} className="stroke-linelight dark:stroke-[#24352a]" />
+        <line key={f} x1={0} x2={W} y1={PAD_Y + f * (H - PAD_Y * 2)} y2={PAD_Y + f * (H - PAD_Y * 2)} className="stroke-linelight dark:stroke-mosslight" />
       ))}
       {release !== trip && (
         <rect x={0} y={bandTop} width={W} height={Math.max(1, bandBottom - bandTop)} className="fill-amber/15 dark:fill-amberbright/15" />

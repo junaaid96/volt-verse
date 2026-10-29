@@ -29,7 +29,7 @@ export function BenchSwitcher({
             className={`rounded-lg px-3 py-1.5 font-display text-sm font-semibold uppercase tracking-wide transition-colors ${
               on
                 ? 'bg-ink text-white dark:bg-leafbright dark:text-pine'
-                : 'text-fog hover:bg-linelight hover:text-ink dark:text-mist dark:hover:bg-[#24352a] dark:hover:text-foam'
+                : 'text-fog hover:bg-linelight hover:text-ink dark:text-mist dark:hover:bg-mosslight dark:hover:text-foam'
             }`}
           >
             {o.name}

@@ -17,12 +17,12 @@ export function WiringDiagram({ board }: { board: WireBoard }) {
         width="100%"
         role="img"
         aria-label={`Wiring map for ${board.board}`}
-        className="rounded-lg border border-linelight bg-paper dark:border-[#24352a] dark:bg-pine"
+        className="rounded-lg border border-linelight bg-paper dark:border-mosslight dark:bg-pine"
       >
-        <text x={pad} y={pad - 2} fontSize="11" fill="#55645a" fontWeight="600">
+        <text x={pad} y={pad - 2} fontSize="11" fontWeight="600" className="fill-fog font-mono dark:fill-mist">
           FROM · module side
         </text>
-        <text x={W - pad} y={pad - 2} fontSize="11" fill="#55645a" fontWeight="600" textAnchor="end">
+        <text x={W - pad} y={pad - 2} fontSize="11" fontWeight="600" textAnchor="end" className="fill-fog font-mono dark:fill-mist">
           TO · {board.board}
         </text>
         {board.pins.map((p, i) => {
@@ -31,12 +31,12 @@ export function WiringDiagram({ board }: { board: WireBoard }) {
           return (
             <g key={i}>
               <rect x={pad} y={y - 13} width={midLeft - pad - 6} height={26} rx={7} fill="none" stroke={color} strokeWidth={1.5} />
-              <text x={pad + 10} y={y + 4} fontSize="11.5" fill="currentColor" className="fill-ink dark:fill-[#e4ece5]">
+              <text x={pad + 10} y={y + 4} fontSize="11.5" fill="currentColor" className="fill-ink font-mono dark:fill-foam">
                 {p.from.length > 38 ? `${p.from.slice(0, 37)}…` : p.from}
                 <title>{p.from}</title>
               </text>
               <rect x={midRight + 6} y={y - 13} width={W - midRight - 6 - pad} height={26} rx={7} fill={color} opacity={0.14} />
-              <text x={midRight + 16} y={y + 4} fontSize="11.5" fontWeight="600" fill={color}>
+              <text x={midRight + 16} y={y + 4} fontSize="11.5" fontWeight="600" fill={color} className="font-mono">
                 {p.to.length > 38 ? `${p.to.slice(0, 37)}…` : p.to}
                 <title>{p.to}</title>
               </text>
@@ -47,18 +47,18 @@ export function WiringDiagram({ board }: { board: WireBoard }) {
           )
         })}
       </svg>
-      <div className="mt-3 overflow-x-auto rounded-lg border border-line dark:border-[#2f4234]">
+      <div className="mt-3 overflow-x-auto rounded-lg border border-line dark:border-edge">
         <table className="w-full min-w-[420px] text-sm">
           <thead>
-            <tr className="bg-linelight text-left dark:bg-[#24352a]">
-              <th className="px-4 py-2 font-semibold text-fog dark:text-[#9bb0a0]">From</th>
-              <th className="px-4 py-2 font-semibold text-fog dark:text-[#9bb0a0]">To ({board.board})</th>
+            <tr className="bg-linelight text-left dark:bg-mosslight">
+              <th className="px-4 py-2 font-semibold text-fog dark:text-mist">From</th>
+              <th className="px-4 py-2 font-semibold text-fog dark:text-mist">To ({board.board})</th>
             </tr>
           </thead>
           <tbody>
             {board.pins.map((p, i) => (
-              <tr key={i} className="border-t border-linelight dark:border-[#24352a]">
-                <td className="px-4 py-2 font-mono text-[13px] text-ink dark:text-[#e4ece5]">{p.from}</td>
+              <tr key={i} className="border-t border-linelight dark:border-mosslight">
+                <td className="px-4 py-2 font-mono text-[13px] text-ink dark:text-foam">{p.from}</td>
                 <td className="px-4 py-2 font-mono text-[13px] font-semibold text-leaf dark:text-leafbright">{p.to}</td>
               </tr>
             ))}

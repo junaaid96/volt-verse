@@ -29,6 +29,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark')
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', theme === 'dark' ? '#0d140f' : '#f2f6f1')
     try {
       localStorage.setItem('vv-theme', JSON.stringify(theme))
     } catch {

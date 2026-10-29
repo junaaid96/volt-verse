@@ -19,7 +19,7 @@ const toOverride: Record<OverrideKey, Override> = { auto: null, on: true, off: f
 const fromOverride = (o: Override): OverrideKey => (o === null ? 'auto' : o ? 'on' : 'off')
 
 const ghostBtn =
-  'inline-flex items-center gap-1.5 rounded-lg border border-line px-3 py-2 text-sm font-medium text-ink transition-colors hover:bg-linelight disabled:opacity-50 dark:border-edge dark:text-foam dark:hover:bg-[#24352a]'
+  'inline-flex items-center gap-1.5 rounded-lg border border-line px-3 py-2 text-sm font-medium text-ink transition-colors hover:bg-linelight disabled:opacity-50 dark:border-edge dark:text-foam dark:hover:bg-mosslight'
 
 function Transport({ s }: { s: Simulation }) {
   const { sim } = s
@@ -29,7 +29,7 @@ function Transport({ s }: { s: Simulation }) {
         type="button"
         onClick={s.togglePlay}
         aria-pressed={s.playing}
-        className="inline-flex items-center gap-1.5 rounded-lg bg-leaf px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#186a3c]"
+        className="inline-flex items-center gap-1.5 rounded-lg bg-leaf px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-leafdeep"
       >
         {s.playing ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
         {s.playing ? 'Pause' : 'Run'}

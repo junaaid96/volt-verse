@@ -10,32 +10,32 @@ export function Footer() {
     .filter(Boolean)
 
   return (
-    <footer className="print-hide mt-16 border-t border-line dark:border-[#24352a]">
+    <footer className="print-hide mt-16 border-t border-line dark:border-mosslight">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-10 md:grid-cols-3">
         <div>
           <Logo compact />
-          <p className="mt-3 max-w-xs text-sm leading-relaxed text-fog dark:text-[#9bb0a0]">
+          <p className="mt-3 max-w-xs text-sm leading-relaxed text-fog dark:text-mist">
             Hands-on hardware guides for university students. Every build ships with versions, wiring,
             steps, a live simulator and code.
           </p>
-          <p className="mt-3 max-w-xs text-xs leading-relaxed text-fog dark:text-[#9bb0a0]">
+          <p className="mt-3 max-w-xs text-xs leading-relaxed text-fog dark:text-mist">
             Progress, bookmarks and theme stay in your browser (localStorage) — no account needed.
           </p>
         </div>
         <nav aria-label="Tracks">
-          <h3 className="font-display text-base font-bold text-ink dark:text-[#e4ece5]">Tracks</h3>
+          <h3 className="font-display text-base font-bold text-ink dark:text-foam">Tracks</h3>
           <ul className="mt-3 space-y-2 text-sm">
             {categories.map((c) => (
               <li key={c.id}>
                 {c.status === 'live' ? (
                   <Link
                     to={`/projects?track=${c.id}`}
-                    className="text-fog hover:text-leaf dark:text-[#9bb0a0] dark:hover:text-leafbright"
+                    className="text-fog hover:text-leaf dark:text-mist dark:hover:text-leafbright"
                   >
                     {c.name} <span className="text-xs">(live)</span>
                   </Link>
                 ) : (
-                  <span className="text-fog dark:text-[#9bb0a0]">
+                  <span className="text-fog dark:text-mist">
                     {c.name} <span className="text-xs">(coming soon)</span>
                   </span>
                 )}
@@ -44,7 +44,7 @@ export function Footer() {
           </ul>
         </nav>
         <nav aria-label="External docs">
-          <h3 className="font-display text-base font-bold text-ink dark:text-[#e4ece5]">Platform docs</h3>
+          <h3 className="font-display text-base font-bold text-ink dark:text-foam">Platform docs</h3>
           <ul className="mt-3 space-y-2 text-sm">
             {docs.map((d) => (
               <li key={d.key}>
@@ -52,7 +52,7 @@ export function Footer() {
                   href={d.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-fog hover:text-leaf dark:text-[#9bb0a0] dark:hover:text-leafbright"
+                  className="text-fog hover:text-leaf dark:text-mist dark:hover:text-leafbright"
                 >
                   {d.label} ↗
                 </a>
@@ -61,8 +61,8 @@ export function Footer() {
           </ul>
         </nav>
       </div>
-      <div className="border-t border-line dark:border-[#24352a]">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 px-4 py-4 text-xs text-fog sm:flex-row sm:justify-between dark:text-[#9bb0a0]">
+      <div className="border-t border-line dark:border-mosslight">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 px-4 py-4 text-xs text-fog sm:flex-row sm:justify-between dark:text-mist">
           <span className="text-center sm:text-left">VoltVerse · built for coursework and final-year projects</span>
           <a
               href="https://junaidul.pro.bd/codejborg"

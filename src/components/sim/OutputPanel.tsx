@@ -49,7 +49,7 @@ export function OutputPanel({ s }: { s: Simulation }) {
         <span className="text-fog dark:text-mist">{sim.actuator}</span>
         <span
           className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold ${
-            run.active ? 'bg-signal text-white' : 'bg-linelight text-fog dark:bg-[#24352a] dark:text-mist'
+            run.active ? 'bg-signal text-white' : 'bg-linelight text-fog dark:bg-mosslight dark:text-mist'
           }`}
         >
           <span
@@ -64,7 +64,7 @@ export function OutputPanel({ s }: { s: Simulation }) {
         {sim.actuator} {state}
       </p>
 
-      <div className="mt-4 overflow-hidden rounded-lg border border-linelight dark:border-[#24352a]">
+      <div className="mt-4 overflow-hidden rounded-lg border border-linelight dark:border-mosslight">
         <div className="flex items-center justify-between px-3 pt-2 text-[11px] text-fog dark:text-mist">
           <span>
             {sim.barLabel} · last {TRACE_SECONDS}s

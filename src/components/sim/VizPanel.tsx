@@ -21,7 +21,7 @@ function Pill({ x, y, text, on }: { x: number; y: number; text: string; on: bool
         width={w}
         height={22}
         rx={11}
-        className={on ? 'fill-signal' : 'fill-linelight dark:fill-[#24352a]'}
+        className={on ? 'fill-signal' : 'fill-linelight dark:fill-mosslight'}
       />
       <text
         x={x}
@@ -39,7 +39,7 @@ function Pill({ x, y, text, on }: { x: number; y: number; text: string; on: bool
 
 function Frame({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="mt-4 overflow-hidden rounded-lg border border-linelight dark:border-[#24352a]">
+    <div className="mt-4 overflow-hidden rounded-lg border border-linelight dark:border-mosslight">
       <div className="px-3 pt-2 text-[11px] text-fog dark:text-mist">{label}</div>
       <svg
         viewBox="0 0 320 132"
@@ -252,8 +252,8 @@ function LockViz({ s }: { s: Simulation }) {
     <Frame label={`Live view · ${sim.actuator}: ${flagged ? sim.onText : sim.offText}`}>
       <rect x={40} y={30} width={130} height={76} rx={10} className="fill-card stroke-line dark:fill-moss dark:stroke-edge" strokeWidth={2} />
       <rect x={54} y={46} width={34} height={26} rx={3} className="fill-amber dark:fill-amberbright" opacity={0.8} />
-      <rect x={96} y={50} width={60} height={7} rx={3.5} className="fill-linelight dark:fill-[#24352a]" />
-      <rect x={96} y={62} width={44} height={7} rx={3.5} className="fill-linelight dark:fill-[#24352a]" />
+      <rect x={96} y={50} width={60} height={7} rx={3.5} className="fill-linelight dark:fill-mosslight" />
+      <rect x={96} y={62} width={44} height={7} rx={3.5} className="fill-linelight dark:fill-mosslight" />
       <rect x={54} y={84} width={102 * norm} height={8} rx={4} className={flagged ? 'fill-signal' : 'fill-leaf dark:fill-leafbright'} />
       <circle cx={238} cy={68} r={30} className={flagged ? 'fill-signal' : 'fill-leaf dark:fill-leafbright'} opacity={0.15} />
       {flagged ? (
@@ -326,7 +326,7 @@ function PadlockViz({ s }: { s: Simulation }) {
           cx={56 + i * 16}
           cy={120}
           r={5}
-          className={i < fails ? 'fill-signal' : 'fill-linelight stroke-line dark:fill-[#24352a] dark:stroke-edge'}
+          className={i < fails ? 'fill-signal' : 'fill-linelight stroke-line dark:fill-mosslight dark:stroke-edge'}
         />
       ))}
       <text x={48} y={104} fontSize={10} className="fill-fog dark:fill-mist">
@@ -399,7 +399,7 @@ function SlotsViz({ s }: { s: Simulation }) {
             width={38}
             height={52}
             rx={5}
-            className={i < 4 - free ? 'fill-linelight stroke-line dark:fill-[#24352a] dark:stroke-edge' : 'fill-paper stroke-leaf dark:fill-pine dark:stroke-leafbright'}
+            className={i < 4 - free ? 'fill-linelight stroke-line dark:fill-mosslight dark:stroke-edge' : 'fill-paper stroke-leaf dark:fill-pine dark:stroke-leafbright'}
             strokeWidth={2}
             strokeDasharray={i < 4 - free ? '' : '5 3'}
           />

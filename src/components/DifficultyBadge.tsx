@@ -2,14 +2,14 @@ import type { Difficulty } from '../data/types'
 
 const styles: Record<Difficulty, string> = {
   Basic: 'bg-palegreen text-leaf dark:bg-moss dark:text-leafbright',
-  Medium: 'bg-[#f7ecd4] text-amber dark:bg-moss dark:text-amberbright',
-  Advanced: 'bg-[#f6ddd6] text-[#a83a2a] dark:bg-moss dark:text-[#f0937f]',
+  Medium: 'bg-amberpale text-amber dark:bg-moss dark:text-amberbright',
+  Advanced: 'bg-claypale text-clay dark:bg-moss dark:text-claybright',
 }
 
 const dots: Record<Difficulty, string> = {
   Basic: 'bg-leaf dark:bg-leafbright',
   Medium: 'bg-amber dark:bg-amberbright',
-  Advanced: 'bg-[#a83a2a] dark:bg-[#f0937f]',
+  Advanced: 'bg-clay dark:bg-claybright',
 }
 
 export function DifficultyBadge({ level }: { level: Difficulty }) {

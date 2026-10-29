@@ -75,7 +75,7 @@ export function InputsPanel({ s }: { s: Simulation }) {
           />
         ))}
 
-      <div className="mt-5 border-t border-linelight pt-4 dark:border-[#24352a]">
+      <div className="mt-5 border-t border-linelight pt-4 dark:border-mosslight">
         <h3 className="mb-3 font-display text-sm font-semibold uppercase tracking-wider text-fog dark:text-mist">
           Firmware rule
         </h3>

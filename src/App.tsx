@@ -25,7 +25,7 @@ export default function App() {
         <BookmarksProvider>
           <HashRouter>
             <ScrollToTop />
-            <div className="flex min-h-screen flex-col bg-paper text-ink dark:bg-pine dark:text-[#e4ece5] print:bg-white">
+            <div className="flex min-h-screen flex-col bg-paper text-ink dark:bg-pine dark:text-foam print:bg-white">
               <Navbar />
               <main className="flex-1 pb-4">
                 <Routes>

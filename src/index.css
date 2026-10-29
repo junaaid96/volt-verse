@@ -25,6 +25,19 @@
   --color-mist: #9bb0a0;
   --color-foam: #e4ece5;
   --color-edge: #2f4234;
+  --color-mosslight: #24352a;
+  --color-fern: #1f3626;
+  --color-spruce: #14231a;
+  --color-sage: #b9c8b6;
+  --color-leafdeep: #186a3c;
+  --color-signaldeep: #1b5c92;
+  --color-amberpale: #f7ecd4;
+  --color-clay: #a83a2a;
+  --color-claybright: #f0937f;
+  --color-claypale: #f6ddd6;
+  --color-codebg: #0f1a12;
+  --color-codetext: #d6f0dc;
+  --color-codeborder: #3a4a1a;
 }
 
 html {
@@ -40,12 +53,7 @@ body {
 
 .dark body {
   background: var(--color-pine);
-  color: #e4ece5;
-}
-
-.font-display {
-  font-family: var(--font-display);
-  letter-spacing: 0;
+  color: var(--color-foam);
 }
 
 /* Keyboard focus: always visible, never on mouse click. */
@@ -181,10 +189,10 @@ button:not(:disabled) {
   color: var(--color-foam);
 }
 .dark .dock-btn:hover {
-  background: #24352a;
+  background: var(--color-mosslight);
 }
 .dark .dock-btn-on {
-  background: #1f3626;
+  background: var(--color-fern);
   color: var(--color-leafbright);
 }
 
@@ -222,7 +230,7 @@ button:not(:disabled) {
 }
 .codeblock::-webkit-scrollbar-thumb,
 .scrollthin::-webkit-scrollbar-thumb {
-  background: #2f4234;
+  background: var(--color-edge);
   border-radius: 99px;
 }
 
@@ -235,11 +243,11 @@ input[type="range"] {
 
 /* Dotted lab-grid backdrop for hero */
 .labgrid {
-  background-image: radial-gradient(circle, #b9c8b6 1px, transparent 1px);
+  background-image: radial-gradient(circle, var(--color-sage) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 .dark .labgrid {
-  background-image: radial-gradient(circle, #24352a 1px, transparent 1px);
+  background-image: radial-gradient(circle, var(--color-mosslight) 1px, transparent 1px);
 }
 
 @media (prefers-reduced-motion: reduce) {

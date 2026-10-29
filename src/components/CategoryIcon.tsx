@@ -1,4 +1,4 @@
-import { Bot, Boxes, CircuitBoard, Cpu, Plane, Wifi, Zap, type LucideIcon } from 'lucide-react'
+import { AppWindow, Bot, Boxes, Brain, CircuitBoard, Cpu, Network, Plane, ShieldCheck, Wifi, Zap, type LucideIcon } from 'lucide-react'
 
 const map: Record<string, LucideIcon> = {
   wifi: Wifi,
@@ -7,6 +7,10 @@ const map: Record<string, LucideIcon> = {
   circuit: CircuitBoard,
   plane: Plane,
   solar: Zap,
+  shield: ShieldCheck,
+  brain: Brain,
+  app: AppWindow,
+  network: Network,
 }
 
 export function CategoryIcon({ icon, className = 'h-5 w-5' }: { icon: string; className?: string }) {

@@ -19,7 +19,7 @@ interface Filters {
 const DEFAULTS: Filters = { q: '', cat: 'all', diff: 'all', sort: 'featured' }
 
 const selectCls =
-  'rounded-lg border border-line bg-card px-3 py-2 text-sm text-ink dark:border-[#2f4234] dark:bg-moss dark:text-[#e4ece5]'
+  'rounded-lg border border-line bg-card px-3 py-2 text-sm text-ink dark:border-edge dark:bg-moss dark:text-foam'
 
 export function Catalog() {
   const [params, setParams] = useSearchParams()
@@ -93,14 +93,14 @@ export function Catalog() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-8">
-      <h1 className="font-display text-3xl font-bold text-ink dark:text-[#e4ece5]">Project guides</h1>
-      <p className="mt-1 text-sm text-fog dark:text-[#9bb0a0]">
+      <h1 className="font-display text-3xl font-bold text-ink dark:text-foam">Project guides</h1>
+      <p className="mt-1 text-sm text-fog dark:text-mist">
         {results.length} of {projects.length} guides
         {activeCat !== 'all' ? ` · ${categories.find((c) => c.id === activeCat)?.name ?? activeCat}` : ''}
         {savedOnly ? ' · saved only' : ''}
       </p>
 
-      <div className="mt-5 rounded-xl border border-line bg-card p-4 dark:border-[#2f4234] dark:bg-moss">
+      <div className="mt-5 rounded-xl border border-line bg-card p-4 dark:border-edge dark:bg-moss">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
           <label className="relative flex-1">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-fog" />
@@ -109,7 +109,7 @@ export function Catalog() {
               value={filters.q}
               onChange={(e) => set('q', e.target.value)}
               placeholder="Search ESP32, RFID, health, LoRa…"
-              className="w-full rounded-lg border border-line bg-paper py-2 pl-9 pr-3 text-sm text-ink placeholder:text-fog/70 dark:border-[#2f4234] dark:bg-pine dark:text-[#e4ece5]"
+              className="w-full rounded-lg border border-line bg-paper py-2 pl-9 pr-3 text-sm text-ink placeholder:text-fog/70 dark:border-edge dark:bg-pine dark:text-foam"
               aria-label="Search guides"
             />
           </label>
@@ -154,8 +154,8 @@ export function Catalog() {
               aria-pressed={savedOnly}
               className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
                 savedOnly
-                  ? 'border-leaf bg-palegreen text-leaf dark:border-leafbright dark:bg-[#1f3626] dark:text-leafbright'
-                  : 'border-line text-fog dark:border-[#2f4234] dark:text-[#9bb0a0]'
+                  ? 'border-leaf bg-palegreen text-leaf dark:border-leafbright dark:bg-fern dark:text-leafbright'
+                  : 'border-line text-fog dark:border-edge dark:text-mist'
               }`}
             >
               <BookmarkCheck className="h-4 w-4" /> Saved
@@ -165,15 +165,15 @@ export function Catalog() {
       </div>
 
       {results.length === 0 ? (
-        <div className="mt-8 rounded-xl border border-dashed border-line p-10 text-center dark:border-[#2f4234]">
-          <p className="font-display text-xl font-bold text-ink dark:text-[#e4ece5]">No guides match</p>
-          <p className="mt-1 text-sm text-fog dark:text-[#9bb0a0]">
+        <div className="mt-8 rounded-xl border border-dashed border-line p-10 text-center dark:border-edge">
+          <p className="font-display text-xl font-bold text-ink dark:text-foam">No guides match</p>
+          <p className="mt-1 text-sm text-fog dark:text-mist">
             Try a shorter keyword, or clear the filters.
           </p>
           <button
             type="button"
             onClick={clearAll}
-            className="mt-4 rounded-lg bg-leaf px-4 py-2 text-sm font-semibold text-white hover:bg-[#186a3c]"
+            className="mt-4 rounded-lg bg-leaf px-4 py-2 text-sm font-semibold text-white hover:bg-leafdeep"
           >
             Clear all filters
           </button>
@@ -190,7 +190,7 @@ export function Catalog() {
         <button
           type="button"
           onClick={clearAll}
-          className="mt-6 text-sm text-fog hover:underline dark:text-[#9bb0a0]"
+          className="mt-6 text-sm text-fog hover:underline dark:text-mist"
         >
           Clear all filters
         </button>

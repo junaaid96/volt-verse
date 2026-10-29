@@ -44,7 +44,7 @@ export function Home() {
   return (
     <div>
       {/* Hero: copy on the left, the 3D bench is the star on the right */}
-      <section className="hero-glow relative overflow-hidden border-b border-line dark:border-[#24352a]">
+      <section className="hero-glow relative overflow-hidden border-b border-line dark:border-mosslight">
         <div className="labgrid pointer-events-none absolute inset-0 opacity-70 [mask-image:linear-gradient(to_bottom,black,transparent_85%)]" />
         <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 py-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:py-16">
           <motion.div initial="hidden" animate="show" variants={stagger}>
@@ -68,7 +68,7 @@ export function Home() {
             <motion.div variants={rise} className="mt-7 flex flex-wrap gap-3">
               <Link
                 to="/projects"
-                className="group inline-flex items-center gap-1.5 rounded-xl bg-leaf px-5 py-3 font-semibold text-white shadow-[0_10px_24px_-12px_rgba(30,122,70,0.8)] transition-all hover:-translate-y-0.5 hover:bg-[#186a3c]"
+                className="group inline-flex items-center gap-1.5 rounded-xl bg-leaf px-5 py-3 font-semibold text-white shadow-[0_10px_24px_-12px_rgba(30,122,70,0.8)] transition-all hover:-translate-y-0.5 hover:bg-leafdeep"
               >
                 Browse the {projects.length} guides
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -76,7 +76,7 @@ export function Home() {
               <button
                 type="button"
                 onClick={() => scrollTo('how')}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-card px-5 py-3 font-semibold text-ink transition-colors hover:bg-linelight dark:border-edge dark:bg-moss dark:text-foam dark:hover:bg-[#24352a]"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-card px-5 py-3 font-semibold text-ink transition-colors hover:bg-linelight dark:border-edge dark:bg-moss dark:text-foam dark:hover:bg-mosslight"
               >
                 <BookOpenCheck className="h-4 w-4" /> How a guide works
               </button>
@@ -118,7 +118,7 @@ export function Home() {
                       className={
                         bench.name === b.name
                           ? 'rounded-full bg-pine px-2.5 py-1 font-mono text-[11px] font-bold tracking-wide text-foam uppercase transition-colors dark:bg-foam dark:text-pine'
-                          : 'rounded-full bg-linelight px-2.5 py-1 font-mono text-[11px] font-bold tracking-wide text-fog uppercase transition-colors hover:bg-line hover:text-ink dark:bg-[#24352a] dark:text-mist dark:hover:bg-[#2f4234]'
+                          : 'rounded-full bg-linelight px-2.5 py-1 font-mono text-[11px] font-bold tracking-wide text-fog uppercase transition-colors hover:bg-line hover:text-ink dark:bg-mosslight dark:text-mist dark:hover:bg-edge'
                       }
                     >
                       {b.short}
@@ -144,14 +144,14 @@ export function Home() {
       {/* Warm-up path for beginners */}
       <section className="mx-auto max-w-7xl px-4 pt-8" aria-label="Beginner warm-up path">
         <div className="flex items-start gap-3">
-          <span className="shrink-0 rounded-lg bg-palegreen p-2.5 text-leaf dark:bg-[#1f3626] dark:text-leafbright">
+          <span className="shrink-0 rounded-lg bg-palegreen p-2.5 text-leaf dark:bg-fern dark:text-leafbright">
             <GraduationCap className="h-5 w-5" />
           </span>
           <div>
-            <h2 className="font-display text-2xl font-bold text-ink dark:text-[#e4ece5]">
+            <h2 className="font-display text-2xl font-bold text-ink dark:text-foam">
               New to hardware? Warm up first
             </h2>
-            <p className="mt-0.5 max-w-3xl text-sm leading-relaxed text-fog dark:text-[#9bb0a0]">
+            <p className="mt-0.5 max-w-3xl text-sm leading-relaxed text-fog dark:text-mist">
               Two free interactive sites where you wire circuits on a 3D board and watch the code
               run. Follow them in order — every guide below assumes you can blink an LED and read
               a sensor.
@@ -178,7 +178,7 @@ export function Home() {
               LEDs, buttons, sensors, motors and servos on a 3D Uno, with guided lessons and a
               built-in simulator. The fastest way to get ready for Uno-based guides.
             </p>
-            <span className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-leaf px-4 py-2 text-sm font-semibold text-white transition-colors group-hover:bg-[#186a3c]">
+            <span className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-leaf px-4 py-2 text-sm font-semibold text-white transition-colors group-hover:bg-leafdeep">
               Open Learn Arduino
             </span>
           </a>
@@ -189,7 +189,7 @@ export function Home() {
             className="group rounded-xl border border-line bg-card p-5 transition-colors hover:border-signal/60 dark:border-edge dark:bg-moss dark:hover:border-signal/70"
           >
             <div className="flex items-center justify-between gap-2">
-              <span className="rounded-full bg-linelight px-2.5 py-1 font-mono text-[11px] font-bold tracking-wide text-fog uppercase dark:bg-[#24352a] dark:text-mist">
+              <span className="rounded-full bg-linelight px-2.5 py-1 font-mono text-[11px] font-bold tracking-wide text-fog uppercase dark:bg-mosslight dark:text-mist">
                 Step 2 · Go wireless
               </span>
               <ExternalLink className="h-4 w-4 shrink-0 text-fog transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 dark:text-mist" />
@@ -202,7 +202,7 @@ export function Home() {
               reference. Do this after Arduino — or start here if your guide uses an ESP32 or
               NodeMCU board.
             </p>
-            <span className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-signal px-4 py-2 text-sm font-semibold text-white transition-colors group-hover:bg-[#1b5c92]">
+            <span className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-signal px-4 py-2 text-sm font-semibold text-white transition-colors group-hover:bg-signaldeep">
               Open Learn ESP32
             </span>
           </a>
@@ -217,7 +217,7 @@ export function Home() {
         <div className="flex items-end justify-between gap-4">
           <div>
             <h2 className="font-display text-3xl font-bold text-ink dark:text-foam">Start here</h2>
-            <p className="mt-1 text-sm text-fog dark:text-[#9bb0a0]">
+            <p className="mt-1 text-sm text-fog dark:text-mist">
               Proven builds, ordered by how often students finish them on time.
             </p>
           </div>
@@ -237,55 +237,69 @@ export function Home() {
       {/* Tracks */}
       <section className="mx-auto max-w-7xl px-4 pt-12">
         <h2 className="font-display text-3xl font-bold text-ink dark:text-foam">Tracks</h2>
-        <p className="mt-1 text-sm text-fog dark:text-[#9bb0a0]">
+        <p className="mt-1 text-sm text-fog dark:text-mist">
           {liveTracks.join(' and ')} {liveTracks.length > 1 ? 'are' : 'is'} live today. The lab is
           structured so new tracks slot in without breaking anything.
         </p>
-        <Reveal className="mt-5 overflow-hidden rounded-xl border border-line dark:border-[#2f4234]">
-          {categories.map((c, i) => (
-            <div
-              key={c.id}
-              className={`flex items-start gap-4 bg-card p-4 sm:items-center dark:bg-moss ${
-                i > 0 ? 'border-t border-linelight dark:border-[#24352a]' : ''
-              }`}
-            >
-              <span className="rounded-lg bg-palegreen p-2.5 text-leaf dark:bg-[#1f3626] dark:text-leafbright">
-                <CategoryIcon icon={c.icon} />
-              </span>
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="font-display text-lg font-bold text-ink dark:text-[#e4ece5]">{c.name}</h3>
-                  {c.status === 'live' ? (
-                    <span className="rounded-full bg-palegreen px-2.5 py-0.5 text-xs font-bold text-leaf dark:bg-[#1f3626] dark:text-leafbright">
-                      LIVE · {projects.filter((p) => p.categoryId === c.id).length} guides
-                    </span>
-                  ) : (
-                    <span className="rounded-full bg-linelight px-2.5 py-0.5 text-xs font-bold text-fog dark:bg-[#24352a] dark:text-[#9bb0a0]">
-                      SOON · {c.planned} planned
-                    </span>
-                  )}
+        <Reveal className="mt-5 overflow-hidden rounded-xl border border-line dark:border-edge">
+          {categories.map((c, i) => {
+            const rowClass = `flex items-start gap-4 bg-card p-4 sm:items-center dark:bg-moss ${
+              i > 0 ? 'border-t border-linelight dark:border-mosslight' : ''
+            }`
+            const content = (
+              <>
+                <span className="rounded-lg bg-palegreen p-2.5 text-leaf dark:bg-fern dark:text-leafbright">
+                  <CategoryIcon icon={c.icon} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="font-display text-lg font-bold text-ink dark:text-foam">{c.name}</h3>
+                    {c.status === 'live' ? (
+                      <span className="rounded-full bg-palegreen px-2.5 py-0.5 text-xs font-bold text-leaf dark:bg-fern dark:text-leafbright">
+                        LIVE · {projects.filter((p) => p.categoryId === c.id).length} guides
+                      </span>
+                    ) : (
+                      <span className="rounded-full bg-linelight px-2.5 py-0.5 text-xs font-bold text-fog dark:bg-mosslight dark:text-mist">
+                        SOON · {c.planned} planned
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-0.5 text-sm text-fog dark:text-mist">
+                    <strong className="font-semibold">{c.tagline}.</strong> {c.description}
+                  </p>
                 </div>
-                <p className="mt-0.5 text-sm text-fog dark:text-[#9bb0a0]">
-                  <strong className="font-semibold">{c.tagline}.</strong> {c.description}
-                </p>
+                {c.status === 'live' && (
+                  <span
+                    aria-hidden="true"
+                    className="hidden shrink-0 rounded-lg border border-line px-3.5 py-2 text-sm font-semibold text-ink transition-colors group-hover:border-leaf group-hover:text-leaf sm:block dark:border-edge dark:text-foam"
+                  >
+                    Open →
+                  </span>
+                )}
+              </>
+            )
+            return c.status === 'live' ? (
+              <Link
+                key={c.id}
+                to={`/projects?track=${c.id}`}
+                aria-label={`Open ${c.name} track`}
+                className={`${rowClass} group transition-colors hover:bg-linelight/50 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-leaf dark:hover:bg-mosslight`}
+              >
+                {content}
+              </Link>
+            ) : (
+              <div key={c.id} className={rowClass}>
+                {content}
               </div>
-              {c.status === 'live' && (
-                <Link
-                  to={`/projects?track=${c.id}`}
-                  className="hidden shrink-0 rounded-lg border border-line px-3.5 py-2 text-sm font-semibold text-ink transition-colors hover:border-leaf hover:text-leaf sm:block dark:border-[#2f4234] dark:text-[#e4ece5]"
-                >
-                  Open →
-                </Link>
-              )}
-            </div>
-          ))}
+            )
+          })}
         </Reveal>
       </section>
 
       {/* How a guide works */}
       <section id="how" className="mx-auto max-w-7xl scroll-mt-24 px-4 pt-12">
         <h2 className="font-display text-3xl font-bold text-ink dark:text-foam">How a guide works</h2>
-        <p className="mt-1 text-sm text-fog dark:text-[#9bb0a0]">
+        <p className="mt-1 text-sm text-fog dark:text-mist">
           Same seven sections in every build, so the newest guide feels as familiar as the first.
         </p>
         <ol className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -303,20 +317,20 @@ export function Home() {
             </Reveal>
           ))}
         </ol>
-        <div className="mt-8 rounded-xl bg-[#14231a] p-6 sm:p-8">
+        <div className="mt-8 rounded-xl bg-spruce p-6 sm:p-8">
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div>
-              <h3 className="font-display text-xl font-bold text-white">New to all of this?</h3>
-              <p className="mt-1 max-w-xl text-sm leading-relaxed text-[#b9c8b6]">
-                Start with Smart Agriculture — it has Basic, Wi-Fi and cloud versions, so you can
-                begin offline and upgrade the same hardware as you learn.
+              <h3 className="font-display text-xl font-bold text-white">Ready to pick a build?</h3>
+              <p className="mt-1 max-w-xl text-sm leading-relaxed text-sage">
+                Browse all {projects.length} {tracksInline} guides — filter by track, board,
+                and difficulty to find one that fits your semester.
               </p>
             </div>
             <Link
-              to="/project/smart-agriculture"
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-leafbright px-5 py-2.5 font-semibold text-[#14231a] transition-colors hover:bg-white"
+              to="/projects"
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-leafbright px-5 py-2.5 font-semibold text-spruce transition-colors hover:bg-white"
             >
-              Open the flagship guide <ArrowRight className="h-4 w-4" />
+              Browse all guides <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
