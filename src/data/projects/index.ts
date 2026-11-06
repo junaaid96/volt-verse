@@ -31,6 +31,10 @@ import { bleTrackerDetector } from './ble-tracker-detector'
 import { rfidCloningLab } from './rfid-cloning-lab'
 import { encryptedLoraMessenger } from './encrypted-lora-messenger'
 import { passwordVault } from './password-vault'
+import { iotHoneypot } from './iot-honeypot'
+import { secureOtaLab } from './secure-ota-lab'
+import { hardware2faToken } from './hardware-2fa-token'
+import { pentestYourIot } from './pentest-your-iot'
 
 /**
  * Project registry. To add a project: create its file under
@@ -70,6 +74,10 @@ export const projects: Project[] = [
   rfidCloningLab,
   encryptedLoraMessenger,
   passwordVault,
+  iotHoneypot,
+  secureOtaLab,
+  hardware2faToken,
+  pentestYourIot,
 ]
 
 export const getProject = (slug: string): Project | undefined =>

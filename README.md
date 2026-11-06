@@ -9,12 +9,13 @@ and Arduino sketches — per board (Uno, ESP32, NodeMCU, ESP32-CAM).
 
 ## Features
 
-- 32 build guides across IoT (15), Robotics (12) and Cybersecurity (5): weather
+- 36 build guides across IoT (15), Robotics (12) and Cybersecurity (9): weather
   stations, health monitors, home automation, vehicle tracking, access control,
   line followers, robot arms, sumo bots, attack detectors, an encrypted LoRa
-  messenger and more — each with Basic → Advanced versions
+  messenger, honeypots, signed OTA, 2FA tokens, pentest labs and more — each
+  with Basic → Advanced versions
 - Per-board parts, wiring maps, and step text with board-specific details
-- 139 Arduino sketches, one per board/version, all compile-verified
+- 147 Arduino sketches, one per board/version, all compile-verified
 - Per-project 3D bench viewer, live-illustrated threshold-logic simulators,
   progress tracking, bookmarks, dark mode, and print-to-PDF guides
 

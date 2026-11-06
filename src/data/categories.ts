@@ -30,7 +30,7 @@ export const categories: Category[] = [
     name: 'Cybersecurity',
     tagline: 'Detectors, crypto & hardening',
     description:
-      'Five defensive builds on ESP32 and Arduino — every one with versions, wiring, steps, a live logic simulator and copy-paste code. Educational purpose only: test only systems you own or are authorized to use.',
+      'Nine defensive builds on ESP32 and Arduino — every one with versions, wiring, steps, a live logic simulator and copy-paste code. Educational purpose only: test only systems you own or are authorized to use.',
     icon: 'shield',
     status: 'live',
   },

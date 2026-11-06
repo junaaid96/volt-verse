@@ -28,7 +28,7 @@ export const passwordVault: Project = {
   skills: ['Key derivation', 'Salts + peppers', 'Rate limiting', 'NVS/EEPROM'],
   scene: 'secure',
   updated: 'Nov 2026',
-  sheets: ['esp32', 'arduino-uno', 'keypad-4x4', 'ssd1306', 'esp-preferences'],
+  sheets: ['esp32', 'arduino-uno', 'keypad-4x4', 'ssd1306', 'esp-preferences', 'owasp-iot'],
   rig: { sensor: 'keypad', extras: ['oled', 'buzzer'] },
   options: [
     {

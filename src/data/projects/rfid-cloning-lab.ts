@@ -25,7 +25,7 @@ export const rfidCloningLab: Project = {
   skills: ['MIFARE Classic', 'UID vs auth', 'Magic cards', 'Secure readers'],
   scene: 'secure',
   updated: 'Nov 2026',
-  sheets: ['esp32', 'esp8266', 'arduino-uno', 'mfrc522', 'level-shifter', 'ssd1306', 'mifare-edu'],
+  sheets: ['esp32', 'esp8266', 'arduino-uno', 'mfrc522', 'level-shifter', 'ssd1306', 'mifare-edu', 'proxmark3'],
   rig: { sensor: 'rc522', extras: ['oled', 'buzzer'] },
   options: [
     {

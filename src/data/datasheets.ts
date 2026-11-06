@@ -2,7 +2,7 @@ import type { Datasheet } from './types'
 
 /**
  * Verified documentation registry. Every URL below returned HTTP 200
- * when checked (Oct 2026). Projects reference entries via `sheets: [...]`.
+ * when checked (Nov 2026). Projects reference entries via `sheets: [...]`.
  * Unknown keys are ignored by the UI, so typos fail safe.
  */
 export const datasheets: Record<string, Datasheet> = {
@@ -322,6 +322,78 @@ export const datasheets: Record<string, Datasheet> = {
     key: 'esp-preferences',
     label: 'Preferences / NVS (arduino-esp32)',
     url: 'https://docs.espressif.com/projects/arduino-esp32/en/latest/tutorials/preferences.html',
+    kind: 'Docs',
+  },
+  'metasploit-docs': {
+    key: 'metasploit-docs',
+    label: 'Metasploit Documentation (Rapid7)',
+    url: 'https://docs.metasploit.com/',
+    kind: 'Docs',
+  },
+  'nmap-docs': {
+    key: 'nmap-docs',
+    label: 'Nmap Documentation',
+    url: 'https://nmap.org/docs.html',
+    kind: 'Docs',
+  },
+  'wireshark-docs': {
+    key: 'wireshark-docs',
+    label: 'Wireshark Documentation',
+    url: 'https://www.wireshark.org/docs/',
+    kind: 'Docs',
+  },
+  'kali-docs': {
+    key: 'kali-docs',
+    label: 'Kali Linux Documentation',
+    url: 'https://www.kali.org/docs/',
+    kind: 'Docs',
+  },
+  'owasp-iot': {
+    key: 'owasp-iot',
+    label: 'OWASP Internet of Things Project + Top 10',
+    url: 'https://owasp.org/www-project-internet-of-things/',
+    kind: 'Docs',
+  },
+  'cowrie-docs': {
+    key: 'cowrie-docs',
+    label: 'Cowrie SSH/Telnet Honeypot Docs',
+    url: 'https://cowrie.readthedocs.io/en/latest/',
+    kind: 'Docs',
+  },
+  'mitre-attack': {
+    key: 'mitre-attack',
+    label: 'MITRE ATT&CK Framework',
+    url: 'https://attack.mitre.org/',
+    kind: 'Docs',
+  },
+  'esp-secure-boot': {
+    key: 'esp-secure-boot',
+    label: 'ESP32 Secure Boot V2 (Espressif)',
+    url: 'https://docs.espressif.com/projects/esp-idf/en/stable/esp32/security/secure-boot-v2.html',
+    kind: 'Docs',
+  },
+  'signed-ota-guide': {
+    key: 'signed-ota-guide',
+    label: 'Signed Firmware OTA Guide (SimpleOTA)',
+    url: 'https://wiki.simpleota.com/guides/signed-firmware/',
+    kind: 'Guide',
+  },
+  'totp-rfc': {
+    key: 'totp-rfc',
+    label: 'RFC 6238: TOTP Time-Based One-Time Passwords',
+    url: 'https://datatracker.ietf.org/doc/html/rfc6238',
+    kind: 'Docs',
+  },
+  'totp-arduino': {
+    key: 'totp-arduino',
+    label: 'TOTP-Arduino Library',
+    url: 'https://github.com/lucadentella/TOTP-Arduino',
+    kind: 'Docs',
+  },
+  'proxmark3': {
+    key: 'proxmark3',
+    label: 'Proxmark3 RFID Research Tool',
+    url: 'https://github.com/RfidResearchGroup/proxmark3',
     kind: 'Docs',
   },
 }

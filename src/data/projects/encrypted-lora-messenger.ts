@@ -28,7 +28,7 @@ export const encryptedLoraMessenger: Project = {
   skills: ['LoRa PHY', 'AES-CBC + nonces', 'Replay defense', 'Two-node protocol'],
   scene: 'city',
   updated: 'Nov 2026',
-  sheets: ['esp32', 'sx1278', 'arduino-lora', 'radiolib', 'ssd1306'],
+  sheets: ['esp32', 'sx1278', 'arduino-lora', 'radiolib', 'ssd1306', 'owasp-iot'],
   rig: { sensor: 'gsm', extras: ['oled'] },
   options: [
     {

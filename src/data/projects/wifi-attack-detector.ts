@@ -28,7 +28,7 @@ export const wifiAttackDetector: Project = {
   skills: ['802.11 frames', 'Promiscuous mode', 'IDS thresholds', 'OLED UI'],
   scene: 'secure',
   updated: 'Nov 2026',
-  sheets: ['esp32', 'ssd1306', 'esp-wifi-modes', 'deauth-canary'],
+  sheets: ['esp32', 'ssd1306', 'esp-wifi-modes', 'deauth-canary', 'wireshark-docs'],
   rig: { sensor: 'oled', extras: ['buzzer'] },
   options: [
     {
