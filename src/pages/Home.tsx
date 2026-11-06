@@ -152,13 +152,36 @@ export function Home() {
               New to hardware? Warm up first
             </h2>
             <p className="mt-0.5 max-w-3xl text-sm leading-relaxed text-fog dark:text-mist">
-              Two free interactive sites where you wire circuits on a 3D board and watch the code
-              run. Follow them in order — every guide below assumes you can blink an LED and read
-              a sensor.
+              Four free interactive sites that take you from first principles to connected builds.
+              Follow them in order — every guide below assumes you can read a resistor, blink an
+              LED and read a sensor.
             </p>
           </div>
         </div>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
+          <a
+            href="https://electronics-101-six.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group rounded-xl border border-line bg-card p-5 transition-colors hover:border-amber/60 dark:border-edge dark:bg-moss dark:hover:border-amberbright/50"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span className="rounded-full bg-pine px-2.5 py-1 font-mono text-[11px] font-bold tracking-wide text-foam uppercase dark:bg-foam dark:text-pine">
+                Step 1 · Start here
+              </span>
+              <ExternalLink className="h-4 w-4 shrink-0 text-fog transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 dark:text-mist" />
+            </div>
+            <h3 className="font-display mt-3 text-2xl font-bold text-ink dark:text-foam">
+              Electronics 101
+            </h3>
+            <p className="mt-1 text-sm leading-relaxed text-fog dark:text-mist">
+              Resistors, Ohm&apos;s law, breadboards and circuit maths in hands-on 3D lessons.
+              Start here if volts, amps and ohms still feel fuzzy.
+            </p>
+            <span className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-amber px-4 py-2 text-sm font-semibold text-white transition group-hover:brightness-90">
+              Open Electronics 101
+            </span>
+          </a>
           <a
             href="https://learn-arduino-red.vercel.app/"
             target="_blank"
@@ -166,8 +189,8 @@ export function Home() {
             className="group rounded-xl border border-line bg-card p-5 transition-colors hover:border-leaf/60 dark:border-edge dark:bg-moss dark:hover:border-leafbright/50"
           >
             <div className="flex items-center justify-between gap-2">
-              <span className="rounded-full bg-pine px-2.5 py-1 font-mono text-[11px] font-bold tracking-wide text-foam uppercase dark:bg-foam dark:text-pine">
-                Step 1 · Start here
+              <span className="rounded-full bg-linelight px-2.5 py-1 font-mono text-[11px] font-bold tracking-wide text-fog uppercase dark:bg-mosslight dark:text-mist">
+                Step 2 · Blink and sense
               </span>
               <ExternalLink className="h-4 w-4 shrink-0 text-fog transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 dark:text-mist" />
             </div>
@@ -190,7 +213,7 @@ export function Home() {
           >
             <div className="flex items-center justify-between gap-2">
               <span className="rounded-full bg-linelight px-2.5 py-1 font-mono text-[11px] font-bold tracking-wide text-fog uppercase dark:bg-mosslight dark:text-mist">
-                Step 2 · Go wireless
+                Step 3 · Go wireless
               </span>
               <ExternalLink className="h-4 w-4 shrink-0 text-fog transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 dark:text-mist" />
             </div>
@@ -206,9 +229,32 @@ export function Home() {
               Open Learn ESP32
             </span>
           </a>
+          <a
+            href="https://protocol-explorer-alpha.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group rounded-xl border border-line bg-card p-5 transition-colors hover:border-clay/60 dark:border-edge dark:bg-moss dark:hover:border-claybright/50"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span className="rounded-full bg-linelight px-2.5 py-1 font-mono text-[11px] font-bold tracking-wide text-fog uppercase dark:bg-mosslight dark:text-mist">
+                Step 4 · Speak IoT
+              </span>
+              <ExternalLink className="h-4 w-4 shrink-0 text-fog transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 dark:text-mist" />
+            </div>
+            <h3 className="font-display mt-3 text-2xl font-bold text-ink dark:text-foam">
+              Protocol Explorer
+            </h3>
+            <p className="mt-1 text-sm leading-relaxed text-fog dark:text-mist">
+              How the internet actually works — packets, HTTP, MQTT and the protocols your IoT
+              builds speak. Do this before the cloud-connected guides.
+            </p>
+            <span className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-clay px-4 py-2 text-sm font-semibold text-white transition group-hover:brightness-90">
+              Open Protocol Explorer
+            </span>
+          </a>
         </div>
         <p className="mt-2.5 text-xs text-fog dark:text-mist">
-          Both sites are free and open in a new tab · Made by Dilum Sanjaya
+          All four sites are free and open in a new tab · Made by Dilum Sanjaya
         </p>
       </section>
 
