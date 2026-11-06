@@ -1,6 +1,6 @@
 import { Suspense, lazy, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, Bookmark, BookmarkCheck, CalendarClock, Cpu, Link2, Printer, Wallet } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Bookmark, BookmarkCheck, CalendarClock, Cpu, Link2, Printer, ShieldAlert, Wallet } from 'lucide-react'
 import { getProject, projects } from '../data/projects'
 import { getCategory } from '../data/categories'
 import { BOARD_NAMES, guideKeys, resolveSelection, selectGuide, supportedBoards, unsupportedBoards } from '../data/guideView'
@@ -161,6 +161,16 @@ function DetailView({ slug }: { slug: string }) {
               {project.title}
             </h1>
             <p className="mt-2 leading-relaxed text-fog dark:text-mist">{project.tagline}</p>
+            {project.categoryId === 'cybersecurity' && (
+              <p role="note" className="mt-3 flex gap-2 rounded-xl border border-amber/50 bg-amber/10 p-3 text-sm leading-relaxed text-fog dark:text-mist">
+                <ShieldAlert className="h-4 w-4 shrink-0 translate-y-0.5 text-amber dark:text-amberbright" aria-hidden="true" />
+                <span>
+                  <strong className="text-ink dark:text-foam">Educational purpose only.</strong> Build and
+                  operate this project only on systems you own or are explicitly authorized to test, and
+                  only under your course supervisor&apos;s scope.
+                </span>
+              </p>
+            )}
             <dl className="mt-4 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
               <div className="rounded-lg border border-line bg-card p-3 dark:border-edge dark:bg-moss">
                 <dt className="text-xs text-fog dark:text-mist">Build time</dt>

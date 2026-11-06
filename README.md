@@ -9,11 +9,12 @@ and Arduino sketches — per board (Uno, ESP32, NodeMCU, ESP32-CAM).
 
 ## Features
 
-- 27 build guides across IoT (15) and Robotics (12): weather stations, health
-  monitors, home automation, vehicle tracking, access control, line followers,
-  robot arms, sumo bots and more — each with Basic → Advanced versions
+- 32 build guides across IoT (15), Robotics (12) and Cybersecurity (5): weather
+  stations, health monitors, home automation, vehicle tracking, access control,
+  line followers, robot arms, sumo bots, attack detectors, an encrypted LoRa
+  messenger and more — each with Basic → Advanced versions
 - Per-board parts, wiring maps, and step text with board-specific details
-- 123 Arduino sketches, one per board/version, all compile-verified
+- 139 Arduino sketches, one per board/version, all compile-verified
 - Per-project 3D bench viewer, live-illustrated threshold-logic simulators,
   progress tracking, bookmarks, dark mode, and print-to-PDF guides
 
@@ -40,7 +41,7 @@ scripts/compile-sketches.sh       # compile every sketch with arduino-cli
 
 Compiling needs `arduino-cli` with the `arduino:avr`, `esp32:esp32`, and
 `esp8266:esp8266` cores plus the guides' libraries (Adafruit Sensor/BME280/
-SSD1306/GFX, Blynk + BlynkESP8266_Lib, DallasTemperature, DHT, ESP32Servo,
+SSD1306/GFX, Blynk + BlynkESP8266_Lib, DallasTemperature, DHT, ESP32Servo, LoRa,
 ESP_SSLClient, FirebaseClient, Keypad, LiquidCrystal I2C, LoRa, MFRC522,
 MPU6050, OneWire, PZEM004Tv30, RTClib, SD, Servo, SparkFun MAX3010x,
 ThingSpeak, TinyGPSPlus, U8g2, UniversalTelegramBot).
@@ -69,6 +70,9 @@ existing entries in `src/data/projects/`.
 Some builds switch mains voltage or charge lithium cells. If you are unsure
 about relay isolation, fusing, or battery protection, build the low-voltage
 version first and ask someone experienced to review your wiring.
+
+Cybersecurity track builds are for educational purposes only: operate them
+only on systems you own or are explicitly authorized to test.
 
 ## License
 

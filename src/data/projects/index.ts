@@ -26,6 +26,11 @@ import { fireFighterRobot } from './fire-fighter-robot'
 import { selfBalancingRobot } from './self-balancing-robot'
 import { pickAndPlaceRover } from './pick-and-place-rover'
 import { miniSumoRobot } from './mini-sumo-robot'
+import { wifiAttackDetector } from './wifi-attack-detector'
+import { bleTrackerDetector } from './ble-tracker-detector'
+import { rfidCloningLab } from './rfid-cloning-lab'
+import { encryptedLoraMessenger } from './encrypted-lora-messenger'
+import { passwordVault } from './password-vault'
 
 /**
  * Project registry. To add a project: create its file under
@@ -60,6 +65,11 @@ export const projects: Project[] = [
   selfBalancingRobot,
   pickAndPlaceRover,
   miniSumoRobot,
+  wifiAttackDetector,
+  bleTrackerDetector,
+  rfidCloningLab,
+  encryptedLoraMessenger,
+  passwordVault,
 ]
 
 export const getProject = (slug: string): Project | undefined =>

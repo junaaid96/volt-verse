@@ -25,20 +25,14 @@ export const categories: Category[] = [
     icon: 'bot',
     status: 'live',
   },
-  // Planned lineup (5): Wi-Fi attack detector, BLE tracker detector, RFID
-  // cloning lab, encrypted LoRa messenger, attack-tested password vault.
-  // Vetted: rogue-AP merged into the detector (same radio + technique),
-  // honeypot cut (real ones need a Pi, sim too thin), brute-force rig merged
-  // into the vault as its test story.
   {
     id: 'cybersecurity',
     name: 'Cybersecurity',
     tagline: 'Detectors, crypto & hardening',
     description:
-      'ESP32 and Arduino builds: a Wi-Fi attack detector, BLE tracker detector, RFID cloning lab, encrypted LoRa messenger and an attack-tested password vault.',
+      'Five defensive builds on ESP32 and Arduino — every one with versions, wiring, steps, a live logic simulator and copy-paste code. Educational purpose only: test only systems you own or are authorized to use.',
     icon: 'shield',
-    status: 'soon',
-    planned: 5,
+    status: 'live',
   },
   // Planned lineup (6): TinyML person detector, voice switch, IMU gesture
   // remote, motor anomaly monitor, fall detector, vision waste sorter. Vetted:

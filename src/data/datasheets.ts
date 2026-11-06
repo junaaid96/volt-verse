@@ -276,6 +276,54 @@ export const datasheets: Record<string, Datasheet> = {
     url: 'https://www.ti.com/lit/ds/symlink/lm2596.pdf',
     kind: 'PDF',
   },
+  'esp-wifi-modes': {
+    key: 'esp-wifi-modes',
+    label: 'ESP32 Wi-Fi Monitor Mode (Espressif)',
+    url: 'https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/wifi-driver/wifi-modes.html',
+    kind: 'Docs',
+  },
+  'deauth-canary': {
+    key: 'deauth-canary',
+    label: 'Deauth Canary Edu Lab (Defensive)',
+    url: 'https://github.com/burak-akdogan/cyber-security-esp32-edu',
+    kind: 'Docs',
+  },
+  'nimble': {
+    key: 'nimble',
+    label: 'NimBLE-Arduino Library',
+    url: 'https://github.com/h2zero/NimBLE-Arduino',
+    kind: 'Docs',
+  },
+  'airguard': {
+    key: 'airguard',
+    label: 'AirGuard Tracker-Detector App',
+    url: 'https://github.com/seemoo-lab/AirGuard',
+    kind: 'Docs',
+  },
+  'mifare-edu': {
+    key: 'mifare-edu',
+    label: 'MIFARE Cloneability + Own-Card Rules (CUPASS)',
+    url: 'https://www.cupass.com/en/learn/how-to-clone-rfid-card.html',
+    kind: 'Guide',
+  },
+  'arduino-lora': {
+    key: 'arduino-lora',
+    label: 'arduino-LoRa Library (SX127x)',
+    url: 'https://github.com/sandeepmistry/arduino-LoRa',
+    kind: 'Docs',
+  },
+  'radiolib': {
+    key: 'radiolib',
+    label: 'RadioLib (SX126x Path)',
+    url: 'https://github.com/jgromes/RadioLib',
+    kind: 'Docs',
+  },
+  'esp-preferences': {
+    key: 'esp-preferences',
+    label: 'Preferences / NVS (arduino-esp32)',
+    url: 'https://docs.espressif.com/projects/arduino-esp32/en/latest/tutorials/preferences.html',
+    kind: 'Docs',
+  },
 }
 
 export const getSheets = (keys?: string[]): Datasheet[] => {
